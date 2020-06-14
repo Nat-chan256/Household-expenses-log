@@ -6,7 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Household_expenses_log"
         mc:Ignorable="d"
-        Title="Вход в аккаунт" Height="301.552" Width="658.217" Closing="MainWindow_Closing">
+        Title="Вход в аккаунт" Height="301.552" Width="658.217" Closing="MainWindow_Closing"
+        WindowStartupLocation="CenterScreen">
     <Grid Height="{Binding ElementName = login_form, Path = Height}" VerticalAlignment="Top">
         <Label x:Name="lb_users_name" Content="Имя пользователя:" HorizontalAlignment="Left" Margin="34,56,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
                FontSize="20"/>

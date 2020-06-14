@@ -51,8 +51,8 @@ namespace Household_expenses_log
             }
         }
 
-        //Метод, проверяющий, не содержит ли поле с именем пользователя посторонних символов
-        private void tb_users_name_LostFocus(object sender, RoutedEventArgs e)
+        //Методы, проверяющие корректность введенных данных
+        private void tb_users_name_TextChanged(object sender, TextChangedEventArgs e)
         {
             foreach (char l in tb_users_name.Text)
             {
@@ -67,17 +67,109 @@ namespace Household_expenses_log
             lb_warning1.Visibility = Visibility.Hidden;
         }
 
+        private void tb_email_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //Проверка корректности email
+            string email_pattern = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
+
+            if (tb_email.Text.Length == 0 || Regex.IsMatch(tb_email.Text, email_pattern, RegexOptions.IgnoreCase))
+            {
+                lb_warning2.Visibility = Visibility.Hidden;
+            }             
+        }
+
+        private void pb_pass_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (pb_pass.Password.Length >= 6 || pb_pass.Password.Length == 0)
+            {
+                lb_warning3.Visibility = Visibility.Hidden;
+            }
+
+            //Сравнение введенных паролей
+            if (pb_pass.Password == pb_pass_repeat.Password)
+            {
+                lb_warning4.Visibility = Visibility.Hidden;
+            }
+        }
+
         private void tb_email_LostFocus(object sender, RoutedEventArgs e)
         {
             //Проверка корректности email
             string email_pattern = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
 
-            if (!Regex.IsMatch(tb_email.Text, email_pattern, RegexOptions.IgnoreCase))
+            if (tb_email.Text.Length > 0 && !Regex.IsMatch(tb_email.Text, email_pattern, RegexOptions.IgnoreCase))
             {
-                
-                return;
+                lb_warning2.Visibility = Visibility.Visible;
             }
+            else
+            {
+                lb_warning2.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void pb_pass_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (pb_pass.Password.Length < 6 && pb_pass.Password.Length > 0)
+            {
+                lb_warning3.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                lb_warning3.Visibility = Visibility.Hidden;
+            }
+
+            //Сравнение введенных паролей
+            if (pb_pass.Password != pb_pass_repeat.Password && pb_pass_repeat.Password.Length > 0)
+            {
+                lb_warning4.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void pb_pass_repeat_LostFocus(object sender, RoutedEventArgs e)
+        {
+            //Сравнение паролей
+            if (pb_pass_repeat.Password != pb_pass.Password)
+            {
+                lb_warning4.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void pb_pass_repeat_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (pb_pass_repeat.Password == pb_pass.Password)
+            {
+                lb_warning4.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void tb_surname_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            foreach (char l in tb_surname.Text)
+            {
+                if (!char.IsLetter(l))
+                {
+                    //Делаем видимой предупреждающую надпись, если встретили не букву
+                    lb_warning5.Visibility = Visibility.Visible;
+                    return;
+                }
+            }
+            //Если были введены только буквы, скрываем предупреждение
+            lb_warning5.Visibility = Visibility.Hidden;
+        }
+
+
+        //Обработчики событий для кнопок
+        private void b_back_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            _previous_window.Show();
+        }
+
+        private void b_sign_up_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
