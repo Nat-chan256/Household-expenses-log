@@ -1,0 +1,23 @@
+﻿<Window x:Class="Household_expenses_log.SignUpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Household_expenses_log"
+        mc:Ignorable="d"
+        Title="Окно регистрации" Height="650" Width="658.217"
+        Closing="SignUpWindow_Closing">
+    <Grid>
+        <Label x:Name="lb_user_name" Content="Имя пользователя:" HorizontalAlignment="Left" Margin="32,48,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
+               FontSize="20"/>
+        <Label Content="Электронная почта:" HorizontalAlignment="Left" Margin="23,98,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
+               FontSize="20" RenderTransformOrigin="0.396,-0.379"/>
+        <Label Content="Пароль:" HorizontalAlignment="Left" Margin="123,148,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
+               FontSize="20"/>
+        <Label Content="Повторите пароль:" HorizontalAlignment="Left" Margin="32,198,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
+               FontSize="20"/>
+        <TextBox HorizontalAlignment="Left" Height="28" Margin="252,48,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"
+                 FontSize="{Binding ElementName= lb_user_name, Path = FontSize}" FontFamily ="Times New Roman" TextAlignment=""/>
+
+    </Grid>
+</Window>

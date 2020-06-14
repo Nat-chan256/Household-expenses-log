@@ -1,0 +1,17 @@
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\bin\Debug\Household_expenses_log.exe.config
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\bin\Debug\Household_expenses_log.exe
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\bin\Debug\Household_expenses_log.pdb
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\Household_expenses_log.csprojAssemblyReference.cache
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\MainWindow.g.cs
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\App.g.cs
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\Household_expenses_log_MarkupCompile.cache
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\Household_expenses_log_MarkupCompile.lref
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\MainWindow.baml
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\Household_expenses_log.g.resources
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\Household_expenses_log.Properties.Resources.resources
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\Household_expenses_log.csproj.GenerateResource.cache
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\Household_expenses_log.csproj.CoreCompileInputs.cache
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\Household_expenses_log.exe
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\Household_expenses_log.pdb
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\SignUpWindow.g.cs
+C:\Учёбка и не учёбка\Учеба\Конструирование алгоритмов и структур данных\Практика\Household_expenses_log\obj\Debug\SignUpWindow.baml
