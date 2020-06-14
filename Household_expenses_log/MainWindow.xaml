@@ -15,7 +15,7 @@
         <TextBox x:Name ="tb_user_name" HorizontalAlignment="Left" Margin="226,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="391"
                 FontSize="15" FontFamily ="Times New Roman" 
                  Height ="{Binding ElementName = lb_users_name, Path = FontSize}"/>
-        <TextBox HorizontalAlignment="Left" Margin="226,130,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="391"
+        <PasswordBox HorizontalAlignment="Left" Margin="226,130,0,0" VerticalAlignment="Top" Width="391"
                 FontSize="15" FontFamily ="Times New Roman" 
                  Height ="{Binding ElementName = lb_pass, Path = FontSize}"/>
         <Button x:Name ="b_sign_up" Content="Зарегестрироваться" HorizontalAlignment="Left" Margin="226,186,0,0" VerticalAlignment="Top" Width="153" Height="42"

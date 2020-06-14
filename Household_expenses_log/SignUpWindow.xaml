@@ -5,19 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Household_expenses_log"
         mc:Ignorable="d"
-        Title="Окно регистрации" Height="650" Width="658.217"
+        Title="Окно регистрации" Height="450" Width="658.217"
         Closing="SignUpWindow_Closing">
-    <Grid>
+    <Grid x:Name="grid_layout">
         <Label x:Name="lb_user_name" Content="Имя пользователя:" HorizontalAlignment="Left" Margin="32,48,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
                FontSize="20"/>
-        <Label Content="Электронная почта:" HorizontalAlignment="Left" Margin="23,98,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
+        <Label Content="Электронная почта:" HorizontalAlignment="Left" Margin="23,112,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
                FontSize="20" RenderTransformOrigin="0.396,-0.379"/>
-        <Label Content="Пароль:" HorizontalAlignment="Left" Margin="123,148,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
+        <Label Content="Пароль:" HorizontalAlignment="Left" Margin="123,182,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
                FontSize="20"/>
-        <Label Content="Повторите пароль:" HorizontalAlignment="Left" Margin="32,198,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
+        <Label Content="Повторите пароль:" HorizontalAlignment="Left" Margin="32,252,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
                FontSize="20"/>
-        <TextBox HorizontalAlignment="Left" Height="28" Margin="252,48,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"
-                 FontSize="{Binding ElementName= lb_user_name, Path = FontSize}" FontFamily ="Times New Roman" TextAlignment=""/>
-
+        
+        <TextBox x:Name="tb_users_name" HorizontalAlignment="Left" Height="28" Margin="252,48,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"
+                 FontSize="{Binding ElementName= lb_user_name, Path = FontSize}" FontFamily ="Times New Roman" LostFocus="tb_users_name_LostFocus"/>
+        <TextBox x:Name="tb_email" HorizontalAlignment="Left" Height="28" Margin="252,118,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"
+            FontSize="{Binding FontSize, ElementName=lb_user_name}" FontFamily ="Times New Roman" LostFocus="tb_email_LostFocus"/>
+        <PasswordBox x:Name="pb_pass" HorizontalAlignment="Left" Height="28" Margin="252,188,0,0" VerticalAlignment="Top" Width="372"
+            FontSize="{Binding FontSize, ElementName=lb_user_name}"/>
+        <PasswordBox x:Name="pb_pass_repeat" HorizontalAlignment="Left" Height="28" Margin="252,258,0,0" VerticalAlignment="Top" Width="372"
+            FontSize="{Binding FontSize, ElementName=lb_user_name}"/>
+        
+        <Button Content="Зарегистрироваться" HorizontalAlignment="Left" Margin="436,336,0,0" VerticalAlignment="Top" Width="188" Height="30"
+                FontSize="15"/>
+        <Button Content="Назад" HorizontalAlignment="Left" Margin="252,336,0,0" VerticalAlignment="Top" Width="85" Height="30"
+            FontSize="15"/>
+        
+        <!-- Предупреждающие надписи для "енотов" -->
+        <Label x:Name="lb_warning1" Content="Имя пользователя должно содержать только буквы." HorizontalAlignment="Left" Margin="252,76,0,0" VerticalAlignment="Top"
+               Foreground="Red" Visibility="Hidden"/>
+        <Label x:Name="lb_warning2" Content="Некорректный ввод электронной почты." HorizontalAlignment="Left" Margin="252,146,0,0" VerticalAlignment="Top"
+               Foreground="Red" Visibility="Hidden"/>
+        <Label x:Name="lb_warning3" Content="Пароль должен иметь длину не менее 6 символов." HorizontalAlignment="Left" Margin="252,216,0,0" VerticalAlignment="Top"
+               Foreground="Red" Visibility="Hidden"/>
+        <Label x:Name="lb_warning4" Content="Пароли не совпадают." HorizontalAlignment="Left" Margin="252,286,0,0" VerticalAlignment="Top"
+               Foreground="Red" Visibility="Hidden"/>
+        
     </Grid>
 </Window>
