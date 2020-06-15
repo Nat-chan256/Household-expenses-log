@@ -32,7 +32,7 @@
             FontSize="{Binding FontSize, ElementName=lb_user_name}" LostFocus="pb_pass_repeat_LostFocus" PasswordChanged="pb_pass_repeat_PasswordChanged"/>
         <TextBox x:Name="tb_surname" HorizontalAlignment="Left" Height="28" Margin="252,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"
             FontSize="{Binding FontSize, ElementName=lb_user_name}" FontFamily ="Times New Roman" TextChanged="tb_surname_TextChanged"/>
-        <TextBox HorizontalAlignment="Left" Height="28" Margin="252,148,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"
+        <TextBox x:Name="tb_login" HorizontalAlignment="Left" Height="28" Margin="252,148,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"
             FontSize="{Binding FontSize, ElementName=lb_user_name}" FontFamily ="Times New Roman" TextChanged="tb_users_name_TextChanged"/>
 
 
@@ -42,16 +42,17 @@
             FontSize="15" Click="b_back_Click"/>
 
         <!-- Предупреждающие надписи для "енотов" -->
-        <Label x:Name="lb_warning1" Content="Имя пользователя должно содержать только буквы." HorizontalAlignment="Left" Margin="252,76,0,0" VerticalAlignment="Top"
-               Foreground="Red" Visibility="Hidden"/>
-        <Label x:Name="lb_warning2" Content="Некорректный ввод электронной почты." HorizontalAlignment="Left" Margin="252,146,0,0" VerticalAlignment="Top"
-               Foreground="Red" Visibility="Hidden"/>
-        <Label x:Name="lb_warning3" Content="Пароль должен иметь длину не менее 6 символов." HorizontalAlignment="Left" Margin="252,216,0,0" VerticalAlignment="Top"
-               Foreground="Red" Visibility="Hidden"/>
-        <Label x:Name="lb_warning4" Content="Пароли не совпадают." HorizontalAlignment="Left" Margin="252,286,0,0" VerticalAlignment="Top"
+        <Label x:Name="lb_warning1" Content="Имя пользователя должно содержать только буквы." HorizontalAlignment="Left" Margin="252,72,0,0" VerticalAlignment="Top"
                Foreground="Red" Visibility="Hidden"/>
         <Label x:Name="lb_warning5" Content="Фамилия должна содержать только буквы." HorizontalAlignment="Left" Margin="252,122,0,0" VerticalAlignment="Top"
                Foreground="Red" Visibility="Hidden" RenderTransformOrigin="0.388,0.423"/>
+        <Label x:Name="lb_warning2" Content="Некорректный ввод электронной почты." HorizontalAlignment="Left" Margin="252,222,0,0" VerticalAlignment="Top"
+               Foreground="Red" Visibility="Hidden"/>
+        <Label x:Name="lb_warning3" Content="Пароль должен иметь длину не менее 6 символов." HorizontalAlignment="Left" Margin="252,272,0,0" VerticalAlignment="Top"
+               Foreground="Red" Visibility="Hidden"/>
+        <Label x:Name="lb_warning4" Content="Пароли не совпадают." HorizontalAlignment="Left" Margin="252,326,0,0" VerticalAlignment="Top"
+               Foreground="Red" Visibility="Hidden"/>
+       
 
     </Grid>
 </Window>

@@ -32,3 +32,10 @@ C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expen
 C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\obj\Debug\Household_expenses_log.Properties.Resources.resources
 C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\obj\Debug\Household_expenses_log.csproj.GenerateResource.cache
 C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\obj\Debug\Household_expenses_log.csproj.CoreCompileInputs.cache
+C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\bin\Debug\MySql.Data.dll
+C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\bin\Debug\Google.Protobuf.dll
+C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\bin\Debug\BouncyCastle.Crypto.dll
+C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\bin\Debug\Ubiety.Dns.Core.dll
+C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\bin\Debug\Renci.SshNet.dll
+C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\bin\Debug\MySql.Data.xml
+C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\obj\Debug\Household_expenses_log.csproj.CopyComplete

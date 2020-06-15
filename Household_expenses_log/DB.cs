@@ -16,14 +16,12 @@ namespace Household_expenses_log
         {
             if (connection.State == System.Data.ConnectionState.Closed)
                 connection.Open();
-
         }
 
         public void closeConnection()
         {
             if (connection.State == System.Data.ConnectionState.Open)
                 connection.Close();
-
         }
 
         public MySqlConnection GetConnection()

@@ -13,7 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using MySql.Data.MySqlClient;
+using System.Data;
 using Label = System.Windows.Controls.Label;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Household_expenses_log
 {
@@ -169,7 +172,202 @@ namespace Household_expenses_log
 
         private void b_sign_up_Click(object sender, RoutedEventArgs e)
         {
+            //Проверка полей
+            if (lb_warning1.Visibility == Visibility.Visible)
+            {
+                MessageBox.Show("Введенное имя некорректно.");
+                return;
+            }
+            else if (lb_warning2.Visibility == Visibility.Visible)
+            {
+                MessageBox.Show("Введенный email некорректен.");
+                return;
+            }
+            else if (lb_warning3.Visibility == Visibility.Visible)
+            {
+                MessageBox.Show("Введенный пароль слишком короткий.");
+                return;
+            }
+            else if (lb_warning4.Visibility == Visibility.Visible)
+            {
+                MessageBox.Show("Введенные пароли не совпадают.");
+                return;
+            }
+            else if (lb_warning5.Visibility == Visibility.Visible)
+            {
+                MessageBox.Show("Введенная фамилия некорректна.");
+                return;
+            }
+            else if (tb_login.Text.Length == 0)
+            {
+                MessageBox.Show("Введите логин.");
+                return;
+            }
+            else if (tb_users_name.Text.Length == 0)
+            {
+                MessageBox.Show("Введите имя.");
+                return;
+            }
+            else if (tb_surname.Text.Length == 0)
+            {
+                MessageBox.Show("Введите фамилию.");
+                return;
+            }
+            else if (tb_email.Text.Length == 0)
+            {
+                MessageBox.Show("Введите email.");
+                return;
+            }
+            else if (pb_pass.Password.Length == 0)
+            {
+                MessageBox.Show("Введите пароль.");
+                return;
+            }
+            else if (pb_pass_repeat.Password.Length == 0)
+            {
+                MessageBox.Show("Введите пароль повторно.");
+                return;
+            }
 
+            //Проверяем, существует ли пользователь с введенным email
+            if (userWithEmailExists(tb_email.Text))
+            {
+                MessageBoxResult mb_result = MessageBox.Show("Пользователь с таким email уже существует. Хотите осуществить вход в систему?",
+                    "Message", MessageBoxButton.YesNo);
+                if (mb_result == MessageBoxResult.Yes) //Если пользователь нажал "Да"
+                {
+                    _previous_window.Show(); //Открываем форму для входа
+                    this.Hide();
+                }
+                return;
+            }
+
+            //Проверяем, существует ли пользователь с таким логином
+            if (userWithLoginExists(tb_login.Text))
+            {
+                MessageBoxResult mb_result = MessageBox.Show("Пользователь с таким логином уже существует. Хотите осуществить вход в систему?",
+                    "Message", MessageBoxButton.YesNo);
+                if (mb_result == MessageBoxResult.Yes) //Если пользователь нажал "Да"
+                {
+                    _previous_window.Show(); //Открываем форму для входа
+                    this.Hide();
+                }
+                return;
+            }
+
+            ////Добавляем пользователя в базу данных 
+            //registerUser(tb_users_name.Text, tb_surname.Text, tb_login.Text, tb_email.Text, pb_pass.Password);
+        }
+
+        //Проверка, существует ли email в базе данных
+        private bool userWithEmailExists(string user_email)
+        {
+            string connection_string = "server=localhost;port=3306;user=root;password=;database=household_expenses_log;";
+            //Запрос
+            string query = $"SELECT * FROM `users` WHERE `email` = {user_email.ToLower()}";
+
+            //Подготовка соединения
+            MySqlConnection databaseConnection = new MySqlConnection(connection_string);
+            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
+            commandDatabase.CommandTimeout = 60;
+            MySqlDataReader reader;
+
+            try
+            {
+                //Открытие базы данных
+                databaseConnection.Open();
+
+                //Исполнение запроса
+                reader = commandDatabase.ExecuteReader();
+
+                if (reader.HasRows) //Если уже есть пользователь с таким email
+                {
+                    //Закрываем соединение
+                    databaseConnection.Close();
+                    return true;
+                }
+                else
+                {
+                    //Закрываем соединение
+                    databaseConnection.Close();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return true;
+        }
+
+        //Проверка, существует ли логин в базе данных
+        private bool userWithLoginExists(string login)
+        {
+            string connection_string = "server=localhost;port=3306;user=root;password=;database=household_expenses_log;";
+            //Запрос
+            string query = $"SELECT * FROM `users` WHERE `login` = {login.ToLower()}";
+
+            //Подготовка соединения
+            MySqlConnection databaseConnection = new MySqlConnection(connection_string);
+            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
+            commandDatabase.CommandTimeout = 60;
+            MySqlDataReader reader;
+
+            try
+            {
+                //Открытие базы данных
+                databaseConnection.Open();
+
+                //Исполнение запроса
+                reader = commandDatabase.ExecuteReader();
+
+                if (reader.HasRows) //Если уже есть пользователь с таким email
+                {
+                    //Закрываем соединение
+                    databaseConnection.Close();
+                    return true;
+                }
+                else
+                {
+                    //Закрываем соединение
+                    databaseConnection.Close();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return true;
+        }
+
+        //Регистрируем пользователя, т.е. добавляем в БД
+        private void registerUser(string name, string surname, string login, string email, string password)
+        {   
+            string connectionString = "datasource=127.0.0.1;port=3306;username=root;password=;database=test;";
+            string query = "INSERT INTO user(`id`, `first_name`, `last_name`, `address`) VALUES (NULL, '" + textBox1.Text + "', '" + textBox2.Text + "', '" + textBox3.Text + "')";
+            // Which could be translated manually to :
+            // INSERT INTO user(`id`, `first_name`, `last_name`, `address`) VALUES (NULL, 'Bruce', 'Wayne', 'Wayne Manor')
+
+            MySqlConnection databaseConnection = new MySqlConnection(connectionString);
+            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
+            commandDatabase.CommandTimeout = 60;
+
+            try
+            {
+                databaseConnection.Open();
+                MySqlDataReader myReader = commandDatabase.ExecuteReader();
+
+                MessageBox.Show("User succesfully registered");
+
+                databaseConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // Show any error message.
+                MessageBox.Show(ex.Message);
+            }
+            
         }
     }
 }
