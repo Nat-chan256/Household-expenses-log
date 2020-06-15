@@ -26,6 +26,8 @@ namespace Household_expenses_log
     public partial class SignUpWindow : Window
     {
         private MainWindow _previous_window;
+        //Связь с базой данных
+        private string _connection_string = "server=localhost;port=3306;user=root;password=;database=household_expenses_log;";
 
         public SignUpWindow(MainWindow previous_window)
         {
@@ -37,6 +39,8 @@ namespace Household_expenses_log
         public void ClearAllFields()
         {
             tb_users_name.Clear();
+            tb_surname.Clear();
+            tb_login.Clear();
             tb_email.Clear();
             pb_pass.Clear();
             pb_pass_repeat.Clear();
@@ -44,6 +48,9 @@ namespace Household_expenses_log
 
         private void SignUpWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            //Если окно было скрыто
+            if (this.Visibility == Visibility.Hidden) return; //Выходим без вызова MessageBox
+
             MessageBoxResult dialog_result = System.Windows.MessageBox.Show("Закрыть приложение?", "Завершение работы", MessageBoxButton.YesNo);
 
             if (dialog_result == MessageBoxResult.Yes)
@@ -255,19 +262,23 @@ namespace Household_expenses_log
                 return;
             }
 
-            ////Добавляем пользователя в базу данных 
-            //registerUser(tb_users_name.Text, tb_surname.Text, tb_login.Text, tb_email.Text, pb_pass.Password);
+            //Добавляем пользователя в базу данных 
+            registerUser(tb_users_name.Text, tb_surname.Text, tb_login.Text, tb_email.Text, pb_pass.Password);
+
+            //Открываем окно с приложением
+            AppWindow app_window = new AppWindow(tb_login.Text.ToLower().Trim(' '));
+            app_window.Show();
+            this.Hide();
         }
 
         //Проверка, существует ли email в базе данных
         private bool userWithEmailExists(string user_email)
         {
-            string connection_string = "server=localhost;port=3306;user=root;password=;database=household_expenses_log;";
             //Запрос
-            string query = $"SELECT * FROM `users` WHERE `email` = {user_email.ToLower()}";
+            string query = $"SELECT * FROM `users` WHERE `email` = '{user_email.ToLower()}';";
 
             //Подготовка соединения
-            MySqlConnection databaseConnection = new MySqlConnection(connection_string);
+            MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
             MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
             commandDatabase.CommandTimeout = 60;
             MySqlDataReader reader;
@@ -303,12 +314,11 @@ namespace Household_expenses_log
         //Проверка, существует ли логин в базе данных
         private bool userWithLoginExists(string login)
         {
-            string connection_string = "server=localhost;port=3306;user=root;password=;database=household_expenses_log;";
             //Запрос
-            string query = $"SELECT * FROM `users` WHERE `login` = {login.ToLower()}";
+            string query = $"SELECT * FROM `users` WHERE `login` = '{login.ToLower()}';";
 
             //Подготовка соединения
-            MySqlConnection databaseConnection = new MySqlConnection(connection_string);
+            MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
             MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
             commandDatabase.CommandTimeout = 60;
             MySqlDataReader reader;
@@ -344,10 +354,9 @@ namespace Household_expenses_log
         //Регистрируем пользователя, т.е. добавляем в БД
         private void registerUser(string name, string surname, string login, string email, string password)
         {   
-            string connectionString = "datasource=127.0.0.1;port=3306;username=root;password=;database=test;";
-            string query = "INSERT INTO user(`id`, `first_name`, `last_name`, `address`) VALUES (NULL, '" + textBox1.Text + "', '" + textBox2.Text + "', '" + textBox3.Text + "')";
-            // Which could be translated manually to :
-            // INSERT INTO user(`id`, `first_name`, `last_name`, `address`) VALUES (NULL, 'Bruce', 'Wayne', 'Wayne Manor')
+            string connectionString = "server=localhost;port=3306;user=root;password=;database=household_expenses_log;";
+            string query = $"INSERT INTO users(`name`, `surname`, `login`, `email`, `password`) VALUES ('{name}', '{surname}', " +
+                $"'{login.ToLower().Trim(' ')}', '{email.ToLower()}', '{password}');";
 
             MySqlConnection databaseConnection = new MySqlConnection(connectionString);
             MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
@@ -356,15 +365,11 @@ namespace Household_expenses_log
             try
             {
                 databaseConnection.Open();
-                MySqlDataReader myReader = commandDatabase.ExecuteReader();
-
-                MessageBox.Show("User succesfully registered");
-
+                MySqlDataReader myReader = commandDatabase.ExecuteReader(); //Добавляем пользователя в БД
                 databaseConnection.Close();
             }
             catch (Exception ex)
             {
-                // Show any error message.
                 MessageBox.Show(ex.Message);
             }
             
