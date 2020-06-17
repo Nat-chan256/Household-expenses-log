@@ -5,8 +5,77 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Household_expenses_log"
         mc:Ignorable="d"
-        Title="Учет домашних расходов" Height="600" Width="658.217">
+        Title="Учет домашних расходов" Height="600" Width="658.217" Closing="AppWindow_Closing"
+        WindowStartupLocation="CenterScreen">
     <Grid>
-        
+        <Menu HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="472">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Сохранить статистику">
+                    <MenuItem Header="За неделю"/>
+                    <MenuItem Header="За месяц"/>
+                    <MenuItem Header="За год"/>
+                </MenuItem>
+                <MenuItem Header="Сохранить историю"/>
+            </MenuItem>
+            <MenuItem Header="Справка">
+                <MenuItem Header="Просмотреть справку"/>
+                <MenuItem Header="О программе"/>
+            </MenuItem>
+            <MenuItem Header="Выход"/>
+        </Menu>
+
+        <Expander HorizontalAlignment="Left" Height="140" Margin="472,0,0,0" Width="178" VerticalAlignment="Top">
+            <Expander.Header>
+                <Label x:Name="lb_user_login"/>
+            </Expander.Header>
+
+            <StackPanel HorizontalAlignment="Left" Height="121" Margin="0,0,-2,0" Width="178" VerticalAlignment="Top" >
+                <Label x:Name="lb_balance" Content="Баланс: " HorizontalAlignment="Center" />
+                <Button Content="Мой профиль"/>
+                <Button Content="Редактировать"/>
+                <Button Content="Настройки"/>
+                <Button Content="Сменить аккаунт"/>
+            </StackPanel>
+        </Expander>
+
+        <TabControl HorizontalAlignment="Left" Height="549" Margin="0,20,0,0" VerticalAlignment="Top" Width="650" SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Header="История">
+                <StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Статистика">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Добавить операцию">
+                <Grid>
+                    <ComboBox x:Name="cb_sent_got" HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="148">
+                        <ComboBoxItem Content="Получено"/>
+                        <ComboBoxItem Content="Потрачено" IsSelected="True"/>
+                    </ComboBox>
+
+                    <TextBox HorizontalAlignment="Left" Height="23" Margin="208,70,0,0" TextWrapping="Wrap" Text="Введите сумму" VerticalAlignment="Top" Width="148"
+                             Foreground="Silver"/>
+                    <Label Content="₽" HorizontalAlignment="Left" Margin="361,63,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <Label Content="Выберите категорию" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <WrapPanel x:Name="wp_categories" HorizontalAlignment="Left" Width="381" Margin="0,160,0,113">
+                       <!-- <Image x:Name="img1" Height="48" Width="48" Margin="5,5,0,0"/>
+                        <Image x:Name="img2" Height="48" Width="48" Margin="5,5,0,0"/>
+                        <Image x:Name="img3" Height="48" Width="48" Margin="5,5,0,0"/>
+                        <Image x:Name="img4" Height="48" Width="48" Margin="5,5,0,0"/>
+                        <Image x:Name="img5" Height="48" Width="48" Margin="5,5,0,0"/>
+                        <Image x:Name="img6" Height="48" Width="48" Margin="5,5,0,0"/>
+                        <Image x:Name="img7" Height="48" Width="48" Margin="5,5,0,0"/>
+                        <Image x:Name="img8" Height="48" Width="48" Margin="5,5,0,0"/>
+                        <Image x:Name="img9" Height="48" Width="48" Margin="5,5,0,0"/>
+                        <Image x:Name="img10" Height="48" Width="48" Margin="5,5,0,0"/>
+                        <Image x:Name="img11" Height="48" Width="48" Margin="5,5,0,0"/>
+                        <Image x:Name="img12" Height="48" Width="48" Margin="5,5,0,0"/>-->
+
+                    </WrapPanel>
+                    <Button Content="Добавить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="96" Margin="285,465,0,0" Height="25"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>

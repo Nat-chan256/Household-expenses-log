@@ -49,7 +49,7 @@ namespace Household_expenses_log
         private void SignUpWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             //Если окно было скрыто
-            if (this.Visibility == Visibility.Hidden) return; //Выходим без вызова MessageBox
+            if (this.Visibility == Visibility.Hidden || this.Visibility == Visibility.Collapsed) return; //Выходим без вызова MessageBox
 
             MessageBoxResult dialog_result = System.Windows.MessageBox.Show("Закрыть приложение?", "Завершение работы", MessageBoxButton.YesNo);
 
@@ -60,6 +60,7 @@ namespace Household_expenses_log
                 e.Cancel = true;
             }
         }
+
 
         //Методы, проверяющие корректность введенных данных
         private void tb_users_name_TextChanged(object sender, TextChangedEventArgs e)
@@ -270,6 +271,7 @@ namespace Household_expenses_log
             app_window.Show();
             this.Hide();
         }
+
 
         //Проверка, существует ли email в базе данных
         private bool userWithEmailExists(string user_email)

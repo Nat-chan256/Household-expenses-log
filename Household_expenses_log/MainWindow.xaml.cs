@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MySql.Data.MySqlClient;
+using System.Data;
 
 namespace Household_expenses_log
 {
@@ -41,7 +43,7 @@ namespace Household_expenses_log
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             //Если окно было скрыто
-            if (this.Visibility == Visibility.Hidden) return; //Выходим без вызова MessageBox
+            if (this.Visibility == Visibility.Hidden || this.Visibility == Visibility.Collapsed) return; //Выходим без вызова MessageBox
 
             MessageBoxResult dialog_result = MessageBox.Show("Закрыть приложение?", "Завершение работы", MessageBoxButton.YesNo);
 
@@ -56,7 +58,7 @@ namespace Household_expenses_log
         private void b_enter_Click(object sender, RoutedEventArgs e)
         {
             //Ищем пользователя в бд
-            string query = $"SELECT * FROM `users` WHERE `login` = '{tb_login.Text.ToLower().Trim(' ')}' AND `password` = '{pb_pass.Password}';";
+            string query = $"SELECT `password` FROM `users` WHERE `login` = '{tb_login.Text.ToLower().Trim(' ')}';";
 
             //Подготовка соединения
             MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
@@ -72,24 +74,38 @@ namespace Household_expenses_log
                 //Исполнение запроса
                 reader = commandDatabase.ExecuteReader();
 
-                if (reader.HasRows) //Если уже есть пользователь с таким email
+                if (reader.HasRows) //Если нашелся пользователь с таким логином
                 {
+                    reader.Read();
+                    if (reader.GetValue(0).ToString() == pb_pass.Password) //Если пароль введен верно
+                    { 
+                        this.Hide();
+                        AppWindow app_window = new AppWindow(tb_login.Text);
+                        app_window.Show(); //Открываем окно с приложением
+                    }
                     //Закрываем соединение
                     databaseConnection.Close();
-                    return true;
                 }
                 else
                 {
+                    MessageBoxResult mb_result = MessageBox.Show("Пользователь с таким логином не найден. Хотите зарегистрироваться?",
+                        "Ошибка входа", MessageBoxButton.YesNo);
+
+                    if (mb_result == MessageBoxResult.Yes)
+                    {
+                        this.Hide();
+                        _sign_up_window.ClearAllFields();
+                        _sign_up_window.Show();
+                    }
+
                     //Закрываем соединение
                     databaseConnection.Close();
-                    return false;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            return true;
         }
     }
 }

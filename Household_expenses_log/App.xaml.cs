@@ -13,5 +13,6 @@ namespace Household_expenses_log
     /// </summary>
     public partial class App : Application
     {
+        
     }
 }
