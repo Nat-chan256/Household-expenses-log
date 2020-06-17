@@ -73,28 +73,41 @@ namespace Household_expenses_log
             }
         }
 
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void tb_sum_Click(object sender, EventArgs e)
         {
-            //Заполняем WrapPanel иконками с категориям в зависимости от значения в комбобоксе
-            if (((ComboBoxItem)cb_sent_got.SelectedItem).Content.ToString() == "Потрачено")
+            TextBox text_box = (TextBox)sender;
+            if (text_box.Text.Contains("Введите сумму"))
+                text_box.Text = "";
+            text_box.Foreground = Brushes.Black;
+        }
+
+        private void tb_sum_Leave(object sender, EventArgs e)
+        {
+            TextBox text_box = (TextBox)sender;
+            if (text_box.Text.Length == 0 || text_box.Text.Contains("Введите сумму"))
             {
-                //Добавляем картинки в список иконок
-                Uri uri = new Uri(@"C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\Images\icon_auto.png");
-                var bitmapimage = new BitmapImage();
-                bitmapimage.BeginInit();
-                bitmapimage.UriSource = uri;
-                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapimage.EndInit();
-
-                Image img1 = new Image();
-                img1.Height = 48;
-                img1.Width = 48;
-                img1.Margin = new Thickness(5, 5, 0, 0);
-                img1.Source = bitmapimage;
-                img1.Stretch = Stretch.Uniform;
-
-                wp_categories.Children.Add(img1);
+                text_box.Foreground = Brushes.Silver;
+                text_box.Text = "Введите сумму";
             }
+            else
+            {
+                text_box.Foreground = Brushes.Black;
+            }
+        }
+
+        private void tb_sum_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox text_box = (TextBox)sender;
+            if (text_box.Text.Contains("Введите сумму"))
+                text_box.Foreground = Brushes.Silver;
+            else
+                text_box.Foreground = Brushes.Black;
+        }
+
+        private void tb_sum_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

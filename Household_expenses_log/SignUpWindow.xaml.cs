@@ -175,6 +175,7 @@ namespace Household_expenses_log
         private void b_back_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
+            _previous_window.ClearAllFields();
             _previous_window.Show();
         }
 

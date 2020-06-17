@@ -32,6 +32,12 @@ namespace Household_expenses_log
             _sign_up_window = new SignUpWindow(this);
         }
 
+        public void ClearAllFields()
+        {
+            tb_login.Clear();
+            pb_pass.Clear();
+        }
+
         private void b_sign_up_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
