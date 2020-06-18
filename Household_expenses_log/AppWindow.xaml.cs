@@ -73,41 +73,52 @@ namespace Household_expenses_log
             }
         }
 
-
-        private void tb_sum_Click(object sender, EventArgs e)
-        {
-            TextBox text_box = (TextBox)sender;
-            if (text_box.Text.Contains("Введите сумму"))
-                text_box.Text = "";
-            text_box.Foreground = Brushes.Black;
-        }
-
-        private void tb_sum_Leave(object sender, EventArgs e)
-        {
-            TextBox text_box = (TextBox)sender;
-            if (text_box.Text.Length == 0 || text_box.Text.Contains("Введите сумму"))
-            {
-                text_box.Foreground = Brushes.Silver;
-                text_box.Text = "Введите сумму";
-            }
-            else
-            {
-                text_box.Foreground = Brushes.Black;
-            }
-        }
-
+        //Метод, ограничивающий ввод не-цифр
         private void tb_sum_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox text_box = (TextBox)sender;
-            if (text_box.Text.Contains("Введите сумму"))
-                text_box.Foreground = Brushes.Silver;
-            else
-                text_box.Foreground = Brushes.Black;
+            int carret_index = text_box.CaretIndex;
+
+            //Проверяем, не начинается ли строка с 0
+            if (text_box.Text.Length > 0 && text_box.Text[0] == '0')
+            {
+                text_box.Text = text_box.Text.Remove(0, 1);
+                if (carret_index > 0) carret_index--;
+            }
+
+            //Проверяем, не введены ли буквы или другие посторонние символы
+            for (int i = 0; i < text_box.Text.Length; ++i)
+                if (!Char.IsDigit(text_box.Text[i]))
+                {
+                    text_box.Text = text_box.Text.Remove(i, 1);
+                    if (i < carret_index) carret_index--;
+                }
+
+            text_box.CaretIndex = carret_index;
         }
 
-        private void tb_sum_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void img_MouseEnter(object sender, MouseEventArgs e)
         {
+            Image img = (Image)sender;
+            Border border = (Border)img.Parent;
+            border.BorderBrush.Opacity = 1.0;
+        }
 
+        private void img_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Image img = (Image)sender;
+            Border border = (Border)img.Parent;
+            border.BorderBrush.Opacity = 0.0;
+        }
+
+        private void img_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Image img = (Image)sender;
+            Border border = (Border)img.Parent;
+            WrapPanel wrap_panel = (WrapPanel)border.Parent;
+
+            //Проверяем, выделена ли в текущий момент выбранная иконка
+            
         }
     }
 }
