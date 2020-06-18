@@ -70,91 +70,91 @@
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img2" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_bone.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img3" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_clothes.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img4" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_dance.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img5" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_gift.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img6" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_grocery.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img7" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_house.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img8" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_kid.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img9" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_medicine.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img10" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_public_transport.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img11" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_restaurant.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img12" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_school.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img13" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_tax.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img14" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_dots.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                 </WrapPanel>
                             </StackPanel>
@@ -168,21 +168,21 @@
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img15" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_salary.png"
-                                           MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                           MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img16" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_dots.png"
-                                           MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"/>
+                                           MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                 </WrapPanel>
                             </StackPanel>
                         </TabItem>
                     </TabControl>
 
-                    <Button Content="Добавить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="96" Margin="285,465,0,0" Height="25"/>
+                    <Button Content="Добавить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="96" Margin="285,465,0,0" Height="25" Click="b_add_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>

@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Runtime.CompilerServices;
+using System.Windows.Media.Animation;
 
 namespace Household_expenses_log
 {
@@ -24,6 +26,7 @@ namespace Household_expenses_log
         private string _cur_user_login;
         private string _connection_string = "server=localhost;port=3306;user=root;password=;database=household_expenses_log;";
         private List<Image> _spent_icons;
+        private Image _selected_icon;
 
         public AppWindow(string cur_user_login)
         {
@@ -97,6 +100,7 @@ namespace Household_expenses_log
             text_box.CaretIndex = carret_index;
         }
 
+        //Методы для иконок
         private void img_MouseEnter(object sender, MouseEventArgs e)
         {
             Image img = (Image)sender;
@@ -108,17 +112,84 @@ namespace Household_expenses_log
         {
             Image img = (Image)sender;
             Border border = (Border)img.Parent;
-            border.BorderBrush.Opacity = 0.0;
+
+            if (img != _selected_icon)
+                border.BorderBrush.Opacity = 0.0;
         }
 
         private void img_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Image img = (Image)sender;
-            Border border = (Border)img.Parent;
-            WrapPanel wrap_panel = (WrapPanel)border.Parent;
 
             //Проверяем, выделена ли в текущий момент выбранная иконка
-            
+            if (img == _selected_icon) //Если выделена
+            {
+                _selected_icon = null; //Снимаем с неё выделение
+                return;
+            }
+
+            //Убираем выделение с уже выбранной иконки, если таковая имеется
+            if (_selected_icon != null)
+            {
+                foreach (Border border in wp_categories.Children)
+                {
+                    if ((Image)border.Child == _selected_icon)
+                    {
+                        border.BorderBrush.Opacity = 0;
+                        break;
+                    }
+                }
+
+                foreach (Border border in wp_categories2.Children)
+                {
+                    if ((Image)border.Child == _selected_icon)
+                    {
+                        border.BorderBrush.Opacity = 0;
+                        break;
+                    }
+                }
+            }
+            _selected_icon = img;
+        }
+
+
+
+        private void b_add_Click(object sender, RoutedEventArgs e)
+        {
+            //Проверка текстбокса на пустоту
+            if (tb_sum.Text.Length == 0)
+            {
+                //Анимация трясущегося текстбокса
+                // Create the animation path.
+                PathGeometry animationPath = new PathGeometry();
+                PathFigure pFigure = new PathFigure();
+                pFigure.StartPoint = new Point(10, 100);
+                PolyBezierSegment pBezierSegment = new PolyBezierSegment();
+                pBezierSegment.Points.Add(new Point(35, 0));
+                pBezierSegment.Points.Add(new Point(135, 0));
+                pBezierSegment.Points.Add(new Point(160, 100));
+                pBezierSegment.Points.Add(new Point(180, 190));
+                pBezierSegment.Points.Add(new Point(285, 200));
+                pBezierSegment.Points.Add(new Point(310, 100));
+                pFigure.Segments.Add(pBezierSegment);
+                animationPath.Figures.Add(pFigure);
+
+                // Freeze the PathGeometry for performance benefits.
+                animationPath.Freeze();
+
+                //Анимация для появления невидимых объектов
+                //DoubleAnimation sharing_tb = new DoubleAnimation();
+                //myDoubleAnimation.From = 1.0;
+                //myDoubleAnimation.To = 0.0;
+                //myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(5));
+                //myDoubleAnimation.AutoReverse = true;
+                //myDoubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
+
+                //myStoryboard = new Storyboard();
+                //myStoryboard.Children.Add(myDoubleAnimation);
+                //Storyboard.SetTargetName(myDoubleAnimation, myRectangle.Name);
+                //Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Rectangle.OpacityProperty));
+            }
         }
     }
 }
