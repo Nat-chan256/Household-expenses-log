@@ -27,6 +27,8 @@ namespace Household_expenses_log
         private string _connection_string = "server=localhost;port=3306;user=root;password=;database=household_expenses_log;";
         private List<Image> _spent_icons;
         private Image _selected_icon;
+        private List<Label> _history;
+        private int _cur_user_balance;
 
         public AppWindow(string cur_user_login)
         {
@@ -57,20 +59,49 @@ namespace Household_expenses_log
                 //Вывод баланса
                 b_reader = commandDatabase.ExecuteReader();
                 b_reader.Read();
-                lb_balance.Content = "Баланс: " + b_reader.GetValue(0).ToString();
+                _cur_user_balance = (int)b_reader.GetValue(0);
+                lb_balance.Content = "Баланс: " + _cur_user_balance.ToString();
                 b_reader.Close();
 
                 //Вывод истории
                 history_reader = history_command.ExecuteReader();
-                history_reader.Read();
-                //object[] data = new object[history_reader.FieldCount];
-                
-              
-                //for (int i = 0; i < history; ++i)
-                //{ 
-                    
-                //}
-                
+
+                _history = new List<Label>();
+                while (history_reader.Read())
+                {
+                    Label cur_label = new Label(); //Создаем отдельную запись для каждой операции
+                    string label_content = history_reader.GetValue(4) + " " + history_reader.GetValue(1) + " " + history_reader.GetValue(2) + " ";
+
+                    int last_digit = (int)history_reader.GetValue(2) % 10;
+                    if (last_digit == 1) label_content += "рубль ";
+                    else if (last_digit < 5 && last_digit != 0) label_content += "рубля ";
+                    else label_content += "рублей ";
+
+                    if (history_reader.GetValue(1).ToString() == "получено")
+                    {
+                        label_content += "из ";
+                    }
+                    else
+                    {
+                        label_content += "на ";
+                    }
+                    label_content += history_reader.GetValue(3);
+                    cur_label.Content = label_content;
+                    cur_label.FontFamily = new FontFamily("Times New Roman");
+                    cur_label.FontSize = 15;
+                    _history.Add(cur_label);
+                }
+                _history.Reverse();
+                foreach(Label label in _history)
+                {
+                    Border border = new Border();
+                    border.Background = Brushes.SkyBlue;
+                    border.BorderBrush = Brushes.DodgerBlue;
+                    border.Child = label;
+                    border.Margin = new Thickness(10, 5, 20, 5);
+                    border.BorderThickness = new Thickness(1);
+                    sp_history.Children.Add(border);
+                }
 
                 databaseConnection.Close(); 
             }
@@ -78,14 +109,29 @@ namespace Household_expenses_log
             {
                 MessageBox.Show(ex.Message);
             }
-
-            
-
-            
         }
 
         private void AppWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            //Обновляем значение баланса для текущего пользователя в БД
+            string query = $"UPDATE `users` SET `cur_budget` = {_cur_user_balance} WHERE `login` = '{_cur_user_login}';";
+            MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
+            MySqlCommand db_command = new MySqlCommand(query, databaseConnection);
+            db_command.CommandTimeout = 60;
+            MySqlDataReader reader;
+
+            try
+            {
+                databaseConnection.Open();
+                reader = db_command.ExecuteReader();
+                reader.Close();
+                databaseConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
             //Если окно было скрыто
             if (this.Visibility == Visibility.Hidden || this.Visibility == Visibility.Collapsed) return; //Выходим без вызова MessageBox
 
@@ -183,7 +229,7 @@ namespace Household_expenses_log
             _selected_icon = img;
         }
 
-
+        //Добавление операции
         private void b_add_Click(object sender, RoutedEventArgs e)
         {
             //Проверка текстбокса на пустоту
@@ -240,7 +286,7 @@ namespace Household_expenses_log
                 DoubleAnimation myDoubleAnimation = new DoubleAnimation();
                 myDoubleAnimation.From = 1.0;
                 myDoubleAnimation.To = 0.0;
-                myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(2));
+                myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(3));
 
                 Storyboard myStoryboard = new Storyboard();
                 myStoryboard.Children.Add(myDoubleAnimation);
@@ -248,6 +294,20 @@ namespace Household_expenses_log
                 Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Label.OpacityProperty));
 
                 myStoryboard.Begin();
+
+                //Меняем текущее значение баланса
+                if (spent_got == "получено")
+                {
+                    _cur_user_balance += money_amount;
+                }
+                else
+                {
+                    _cur_user_balance -= money_amount;
+                }
+                lb_balance.Content = "Баланс: " + _cur_user_balance;
+
+                //Добавляем новую операцию в историю
+                InsertOperationIntoHistory(now.ToString("yyyy-MM-dd H:mm:ss"), spent_got, money_amount, _selected_icon.Tag.ToString());
             }
             catch (Exception ex)
             {
@@ -271,6 +331,38 @@ namespace Household_expenses_log
             { 
                 
             }
+        }
+
+        //Добавление новой операции в историю
+        private void InsertOperationIntoHistory(string date, string spent_got, int money_amount, string category)
+        {
+            Label cur_label = new Label(); //Создаем отдельную запись для операции
+            string label_content = date + " " + spent_got + " " + money_amount + " ";
+
+            int last_digit = money_amount % 10;
+            if (last_digit == 1) label_content += "рубль ";
+            else if (last_digit < 5 && last_digit != 0) label_content += "рубля ";
+            else label_content += "рублей ";
+
+            if (spent_got== "получено")
+            {
+                label_content += "из ";
+            }
+            else
+            {
+                label_content += "на ";
+            }
+            label_content += category;
+            cur_label.Content = label_content;
+            cur_label.FontFamily = new FontFamily("Times New Roman");
+            cur_label.FontSize = 15;
+
+            //Добавляем в список
+            _history.Reverse();
+            _history.Add(cur_label);
+            _history.Reverse();
+
+            //
         }
     }
 }
