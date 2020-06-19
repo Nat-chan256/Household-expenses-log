@@ -49,111 +49,118 @@
             <TabItem Header="Добавить операцию">
                 <Grid>
                     <Label Content="Введите сумму:" HorizontalAlignment="Left" Margin="0,66,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    
                     <TextBox x:Name="tb_sum" HorizontalAlignment="Left" Height="27" Margin="140,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216"
-                             FontSize="18" TextChanged="tb_sum_TextChanged"/>
+                            FontSize="18" TextChanged="tb_sum_TextChanged" BorderBrush="Black" BorderThickness="1" GotFocus="tb_sum_GotFocus"/>
+                    
                     <Label Content="₽" HorizontalAlignment="Left" Margin="361,63,0,0" VerticalAlignment="Top" FontSize="20"/>
+                    <Label x:Name="lb_warning" Content="Заполните поле" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="197,97,0,0"
+                           Foreground="Red" Opacity="0"/>
 
-                    <TabControl Margin="0,165,263,73">
+
+                    <TabControl x:Name="tc_categories" Margin="0,165,263,73">
                         <TabItem Header="Потрачено">
                             <StackPanel>
-                                <Label Content="Выберите категорию" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" FontSize="18"/>
+                                <Label x:Name="lb_choose_category" Content="Выберите категорию" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" 
+                                       FontSize="18"/>
                                 <WrapPanel x:Name="wp_categories" HorizontalAlignment="Left" Width="381" Margin="0,0,0,0" Visibility="Visible">
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img1" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_auto.png" 
+                                        <Image x:Name="img1" Tag="Обслуживание автомобиля" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_auto.png" 
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img2" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_bone.png"
+                                        <Image x:Name="img2" Tag="Домашние животные" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_bone.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img3" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_clothes.png"
+                                        <Image x:Name="img3" Tag="Шоппинг" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_clothes.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img4" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_dance.png"
+                                        <Image x:Name="img4" Tag="Развлечения" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_dance.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                    </Border>
+                                    <Border BorderThickness="3">
+                                        <Border.BorderBrush>
+                                            <SolidColorBrush Color="#53b8e0" Opacity="0"/>
+                                        </Border.BorderBrush>
+                                        <Image x:Name="img5" Tag="Подарки" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_gift.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img5" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_gift.png"
+                                        <Image x:Name="img6" Tag="Бакалейные товары" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_grocery.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img6" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_grocery.png"
+                                        <Image x:Name="img7" Tag="Товары для дома" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_house.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img7" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_house.png"
+                                        <Image x:Name="img8" Tag="Дети" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_kid.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img8" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_kid.png"
+                                        <Image x:Name="img9" Tag="Здоровье" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_medicine.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img9" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_medicine.png"
+                                        <Image x:Name="img10" Tag="Общественный транспорт" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_public_transport.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img10" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_public_transport.png"
+                                        <Image x:Name="img11" Tag="Еда вне дома" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_restaurant.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img11" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_restaurant.png"
+                                        <Image x:Name="img12" Tag="Образование" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_school.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img12" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_school.png"
+                                        <Image x:Name="img13" Tag="Счета и налоги" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_tax.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img13" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_tax.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
-                                    </Border>
-                                    <Border BorderThickness="3">
-                                        <Border.BorderBrush>
-                                            <SolidColorBrush Color="#53b8e0" Opacity="0"/>
-                                        </Border.BorderBrush>
-                                        <Image x:Name="img14" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_dots.png"
+                                        <Image x:Name="img14" Tag="Другое" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_dots.png"
                                                MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                 </WrapPanel>
@@ -161,20 +168,20 @@
                         </TabItem>
                         <TabItem Header="Получено">
                             <StackPanel>
-                                <Label Content="Выберите категорию" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" FontSize="18"/>
+                                <Label x:Name="lb_choose_category2" Content="Выберите категорию" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" FontSize="18"/>
                                 <WrapPanel x:Name="wp_categories2" HorizontalAlignment="Left" Width="381" Margin="0,0,0,0" Visibility="Visible">
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img15" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_salary.png"
+                                        <Image x:Name="img15" Tag="Зарплата" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_salary.png"
                                            MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img16" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_dots.png"
+                                        <Image x:Name="img16" Tag="Другое" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_dots.png"
                                            MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
                                     </Border>
                                 </WrapPanel>

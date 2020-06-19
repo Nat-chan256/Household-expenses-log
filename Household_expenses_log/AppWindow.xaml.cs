@@ -119,6 +119,14 @@ namespace Household_expenses_log
 
         private void img_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            //Убираем красные рамку и надпись
+            tc_categories.BorderBrush = Brushes.Black;
+            tc_categories.BorderThickness = new Thickness(1);
+            lb_choose_category.Foreground = Brushes.Black;
+            lb_choose_category.FontWeight = FontWeights.Normal;
+            lb_choose_category2.Foreground = Brushes.Black;
+            lb_choose_category2.FontWeight = FontWeights.Normal;
+
             Image img = (Image)sender;
 
             //Проверяем, выделена ли в текущий момент выбранная иконка
@@ -153,43 +161,67 @@ namespace Household_expenses_log
         }
 
 
-
         private void b_add_Click(object sender, RoutedEventArgs e)
         {
             //Проверка текстбокса на пустоту
             if (tb_sum.Text.Length == 0)
             {
-                //Анимация трясущегося текстбокса
-                // Create the animation path.
-                PathGeometry animationPath = new PathGeometry();
-                PathFigure pFigure = new PathFigure();
-                pFigure.StartPoint = new Point(10, 100);
-                PolyBezierSegment pBezierSegment = new PolyBezierSegment();
-                pBezierSegment.Points.Add(new Point(35, 0));
-                pBezierSegment.Points.Add(new Point(135, 0));
-                pBezierSegment.Points.Add(new Point(160, 100));
-                pBezierSegment.Points.Add(new Point(180, 190));
-                pBezierSegment.Points.Add(new Point(285, 200));
-                pBezierSegment.Points.Add(new Point(310, 100));
-                pFigure.Segments.Add(pBezierSegment);
-                animationPath.Figures.Add(pFigure);
-
-                // Freeze the PathGeometry for performance benefits.
-                animationPath.Freeze();
-
-                //Анимация для появления невидимых объектов
-                //DoubleAnimation sharing_tb = new DoubleAnimation();
-                //myDoubleAnimation.From = 1.0;
-                //myDoubleAnimation.To = 0.0;
-                //myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(5));
-                //myDoubleAnimation.AutoReverse = true;
-                //myDoubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
-
-                //myStoryboard = new Storyboard();
-                //myStoryboard.Children.Add(myDoubleAnimation);
-                //Storyboard.SetTargetName(myDoubleAnimation, myRectangle.Name);
-                //Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Rectangle.OpacityProperty));
+                tb_sum.BorderBrush = Brushes.Red;
+                tb_sum.BorderThickness = new Thickness(3);
+                lb_warning.Opacity = 1;
+                return;
             }
+
+            //Проверка, выбрана ли категория
+            if (_selected_icon == null)
+            {
+                tc_categories.BorderBrush = Brushes.Red;
+                tc_categories.BorderThickness = new Thickness(3);
+                lb_choose_category.Foreground = Brushes.Red;
+                lb_choose_category.FontWeight = FontWeights.Bold;
+                lb_choose_category2.Foreground = Brushes.Red;
+                lb_choose_category2.FontWeight = FontWeights.Bold;
+                return;
+            }
+
+            //Делаем запись в базу данных
+            int money_amount = Int32.Parse(tb_sum.Text);
+            string spent_got = ((TabItem)tc_categories.SelectedItem).Header.ToString();
+
+            //Создаем таблицу
+            string create_table_query = $"CREATE TABLE `operations` IF NOT EXIST (login VARCHAR(30) NOT NULL, spent_got TINYINT(1) NOT NULL," +
+                $"amount INT NOT NULL, category VARCHAR(20) NOT NULL, date DATETIME NOT NULL);";
+            MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
+            MySqlCommand create_table_command = new MySqlCommand(create_table_query, databaseConnection);
+            create_table_command.CommandTimeout = 60;
+
+            //Создаем запрос на вставку операции
+            string insert_op_query = $"INSERT INTO `operations` (`login`, `spent_got`, `amount, `category`, `date`) VALUES ('{_cur_user_login}'," +
+                $" '{spent_got}', '{money_amount}', '{email.ToLower()}', '{password}');";
+
+            MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
+            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
+            commandDatabase.CommandTimeout = 60;
+
+            try
+            {
+                databaseConnection.Open();
+                MySqlDataReader myReader = commandDatabase.ExecuteReader(); //Добавляем пользователя в БД
+                databaseConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+        private void tb_sum_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //Убираем красные рамку и надпись
+            tb_sum.BorderBrush = Brushes.Black;
+            tb_sum.BorderThickness = new Thickness(1);
+            lb_warning.Opacity = 0;
         }
     }
 }
