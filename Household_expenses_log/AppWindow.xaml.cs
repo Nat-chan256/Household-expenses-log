@@ -36,22 +36,41 @@ namespace Household_expenses_log
             _spent_icons = new List<Image>();
 
             //Ищем баланс пользователя в базе данных
-            string query = $"SELECT `cur_budget` FROM `users` WHERE `login` = '{_cur_user_login}';";
+            string balance_query = $"SELECT `cur_budget` FROM `users` WHERE `login` = '{_cur_user_login}';";
 
             MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
-            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
+            MySqlCommand commandDatabase = new MySqlCommand(balance_query, databaseConnection);
             commandDatabase.CommandTimeout = 60;
-            MySqlDataReader reader;
+            MySqlDataReader b_reader;
+
+            //Вывод истории
+            string history_query = $"SELECT * FROM `operations` WHERE `login` = '{_cur_user_login}';";
+            MySqlCommand history_command = new MySqlCommand(history_query, databaseConnection);
+            history_command.CommandTimeout = 60;
+            MySqlDataReader history_reader;
 
             try
             {
                 //Открытие базы данных
                 databaseConnection.Open();
 
-                //Исполнение запроса
-                reader = commandDatabase.ExecuteReader();
-                reader.Read();
-                lb_balance.Content = "Баланс: " + reader.GetValue(0).ToString();
+                //Вывод баланса
+                b_reader = commandDatabase.ExecuteReader();
+                b_reader.Read();
+                lb_balance.Content = "Баланс: " + b_reader.GetValue(0).ToString();
+                b_reader.Close();
+
+                //Вывод истории
+                history_reader = history_command.ExecuteReader();
+                history_reader.Read();
+                //object[] data = new object[history_reader.FieldCount];
+                
+              
+                //for (int i = 0; i < history; ++i)
+                //{ 
+                    
+                //}
+                
 
                 databaseConnection.Close(); 
             }
@@ -59,6 +78,10 @@ namespace Household_expenses_log
             {
                 MessageBox.Show(ex.Message);
             }
+
+            
+
+            
         }
 
         private void AppWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -186,35 +209,52 @@ namespace Household_expenses_log
 
             //Делаем запись в базу данных
             int money_amount = Int32.Parse(tb_sum.Text);
-            string spent_got = ((TabItem)tc_categories.SelectedItem).Header.ToString();
+            string spent_got = ((TabItem)tc_categories.SelectedItem).Header.ToString().ToLower();
+            DateTime now = DateTime.Now;
 
             //Создаем таблицу
-            string create_table_query = $"CREATE TABLE `operations` IF NOT EXIST (login VARCHAR(30) NOT NULL, spent_got TINYINT(1) NOT NULL," +
-                $"amount INT NOT NULL, category VARCHAR(20) NOT NULL, date DATETIME NOT NULL);";
+            string create_table_query = $"CREATE TABLE IF NOT EXISTS `operations` (login VARCHAR(30) NOT NULL, spent_got VARCHAR(15) NOT NULL," +
+                $"amount INT NOT NULL, category VARCHAR(40) NOT NULL, date DATETIME NOT NULL);";
+
             MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
             MySqlCommand create_table_command = new MySqlCommand(create_table_query, databaseConnection);
             create_table_command.CommandTimeout = 60;
 
             //Создаем запрос на вставку операции
-            string insert_op_query = $"INSERT INTO `operations` (`login`, `spent_got`, `amount, `category`, `date`) VALUES ('{_cur_user_login}'," +
-                $" '{spent_got}', '{money_amount}', '{email.ToLower()}', '{password}');";
+            string insert_op_query = $"INSERT INTO `operations` (`login`, `spent_got`, `amount`, `category`, `date`) VALUES ('{_cur_user_login}'," +
+                $" '{spent_got}', {money_amount}, '{_selected_icon.Tag}', '{now.ToString("yyyy-MM-dd H:mm:ss")}');";
 
-            MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
-            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
-            commandDatabase.CommandTimeout = 60;
+            MySqlCommand insert_op_command = new MySqlCommand(insert_op_query, databaseConnection);
+            insert_op_command.CommandTimeout = 60;
 
             try
             {
                 databaseConnection.Open();
-                MySqlDataReader myReader = commandDatabase.ExecuteReader(); //Добавляем пользователя в БД
+                MySqlDataReader reader1 = create_table_command.ExecuteReader();
+                reader1.Close();
+                MySqlDataReader reader2 = insert_op_command.ExecuteReader(); 
                 databaseConnection.Close();
+
+                lb_succes.Opacity = 1;
+                //Анимируем затухание надписи о добавлении операции
+                DoubleAnimation myDoubleAnimation = new DoubleAnimation();
+                myDoubleAnimation.From = 1.0;
+                myDoubleAnimation.To = 0.0;
+                myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(2));
+
+                Storyboard myStoryboard = new Storyboard();
+                myStoryboard.Children.Add(myDoubleAnimation);
+                Storyboard.SetTarget(myDoubleAnimation, lb_succes);
+                Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(Label.OpacityProperty));
+
+                myStoryboard.Begin();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-
         }
+
 
         private void tb_sum_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -222,6 +262,15 @@ namespace Household_expenses_log
             tb_sum.BorderBrush = Brushes.Black;
             tb_sum.BorderThickness = new Thickness(1);
             lb_warning.Opacity = 0;
+        }
+
+
+        private void tab_control_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.Source is TabControl)
+            { 
+                
+            }
         }
     }
 }

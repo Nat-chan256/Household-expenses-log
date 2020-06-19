@@ -38,7 +38,7 @@
             </StackPanel>
         </Expander>
 
-        <TabControl HorizontalAlignment="Left" Height="549" Margin="0,20,0,0" VerticalAlignment="Top" Width="650">
+        <TabControl HorizontalAlignment="Left" Height="549" Margin="0,20,0,0" VerticalAlignment="Top" Width="650" SelectionChanged="tab_control_SelectionChanged">
             <TabItem Header="История">
                 <StackPanel>
                 </StackPanel>
@@ -48,17 +48,17 @@
             </TabItem>
             <TabItem Header="Добавить операцию">
                 <Grid>
-                    <Label Content="Введите сумму:" HorizontalAlignment="Left" Margin="0,66,0,0" VerticalAlignment="Top" FontSize="18"/>
+                    <Label Content="Введите сумму:" HorizontalAlignment="Left" Margin="4,46,0,0" VerticalAlignment="Top" FontSize="18"/>
                     
-                    <TextBox x:Name="tb_sum" HorizontalAlignment="Left" Height="27" Margin="140,70,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216"
+                    <TextBox x:Name="tb_sum" HorizontalAlignment="Left" Height="27" Margin="145,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216"
                             FontSize="18" TextChanged="tb_sum_TextChanged" BorderBrush="Black" BorderThickness="1" GotFocus="tb_sum_GotFocus"/>
                     
-                    <Label Content="₽" HorizontalAlignment="Left" Margin="361,63,0,0" VerticalAlignment="Top" FontSize="20"/>
-                    <Label x:Name="lb_warning" Content="Заполните поле" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="197,97,0,0"
+                    <Label Content="₽" HorizontalAlignment="Left" Margin="366,46,0,0" VerticalAlignment="Top" FontSize="20"/>
+                    <Label x:Name="lb_warning" Content="Заполните поле" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="207,80,0,0"
                            Foreground="Red" Opacity="0"/>
 
 
-                    <TabControl x:Name="tc_categories" Margin="0,165,263,73">
+                    <TabControl x:Name="tc_categories" Margin="0,128,263,110">
                         <TabItem Header="Потрачено">
                             <StackPanel>
                                 <Label x:Name="lb_choose_category" Content="Выберите категорию" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" 
@@ -189,7 +189,9 @@
                         </TabItem>
                     </TabControl>
 
-                    <Button Content="Добавить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="96" Margin="285,465,0,0" Height="25" Click="b_add_Click"/>
+                    <Label x:Name="lb_succes"  Content="Операция успешно добавлена" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="74,416,0,0"
+                           Foreground="LimeGreen" FontSize="15" Opacity="0"/>
+                    <Button Content="Добавить" HorizontalAlignment="Left" VerticalAlignment="Top" Width="96" Margin="285,462,0,0" Height="25" Click="b_add_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>
