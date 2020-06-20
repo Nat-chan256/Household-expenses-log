@@ -31,6 +31,7 @@ namespace Household_expenses_log
         private List<Label> _history;
         private int _cur_user_balance;
         private delegate void _WriteToWordFileDelegate(string file_name, string text);
+        private ChangeAccWindow _change_acc_window;
 
         public AppWindow(string cur_user_login)
         {
@@ -38,6 +39,7 @@ namespace Household_expenses_log
             _cur_user_login = cur_user_login;
             lb_user_login.Content = cur_user_login;
             _spent_icons = new List<Image>();
+            _change_acc_window = new ChangeAccWindow(this);
 
             //Ищем баланс пользователя в базе данных
             string balance_query = $"SELECT `cur_budget` FROM `users` WHERE `login` = '{_cur_user_login}';";
@@ -467,6 +469,13 @@ namespace Household_expenses_log
                     d.BeginInvoke(save_file_dialog.FileName, text, null, null);   
                 }
             }
+        }
+
+        private void b_change_acc_Click(object sender, RoutedEventArgs e)
+        {
+            _change_acc_window.ClearAllFields();
+            this.Hide();
+            _change_acc_window.Show();
         }
     }
 }

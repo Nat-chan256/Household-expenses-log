@@ -285,6 +285,14 @@ namespace Household_expenses_log
                 sign_up_flag = false;
             }
 
+            if (pb_pass_repeat.Password.Length == 0 && pb_pass.Password.Length > 0)
+            {
+                pb_pass_repeat.BorderBrush = Brushes.Red;
+                pb_pass_repeat.BorderThickness = new Thickness(3);
+                lb_warning4.Visibility = Visibility.Visible;
+                sign_up_flag = false;
+            }
+
             if (sign_up_flag == false) return;
             
             //Проверяем, существует ли пользователь с введенным email
@@ -441,7 +449,7 @@ namespace Household_expenses_log
                 {
                     if (!(child is Label)) continue;
 
-                    if (((Label)child).Tag.ToString() == text_box.Tag.ToString())
+                    if (((Label)child).Tag != null && text_box.Tag != null && ((Label)child).Tag.ToString() == text_box.Tag.ToString())
                         ((Label)child).Visibility = Visibility.Hidden;
                 }
             }
@@ -455,7 +463,7 @@ namespace Household_expenses_log
                 {
                     if (!(child is Label)) continue;
 
-                    if (((Label)child).Tag.ToString() == text_box.Tag.ToString())
+                    if (((Label)child).Tag != null && text_box.Tag != null && ((Label)child).Tag.ToString() == text_box.Tag.ToString())
                         ((Label)child).Visibility = Visibility.Hidden;
                 }
             }

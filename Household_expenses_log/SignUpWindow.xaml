@@ -32,7 +32,8 @@
             FontSize="{Binding FontSize, ElementName=lb_user_name}" PasswordChanged="pb_pass_PasswordChanged" LostFocus="pb_pass_LostFocus"
                      GotFocus="tb_GotFocus"/>
         <PasswordBox x:Name="pb_pass_repeat" HorizontalAlignment="Left" Height="28" Margin="252,298,0,0" VerticalAlignment="Top" Width="372"
-            FontSize="{Binding FontSize, ElementName=lb_user_name}" LostFocus="pb_pass_repeat_LostFocus" PasswordChanged="pb_pass_repeat_PasswordChanged"/>
+            FontSize="{Binding FontSize, ElementName=lb_user_name}" LostFocus="pb_pass_repeat_LostFocus" 
+                     PasswordChanged="pb_pass_repeat_PasswordChanged" GotFocus="tb_GotFocus"/>
         <TextBox x:Name="tb_surname" Tag="Surname" HorizontalAlignment="Left" Height="28" Margin="252,98,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"
             FontSize="{Binding FontSize, ElementName=lb_user_name}" FontFamily ="Times New Roman" TextChanged="tb_surname_TextChanged" 
                  GotFocus="tb_GotFocus"/>

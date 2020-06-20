@@ -9,23 +9,20 @@
         Title="Вход в аккаунт" Height="301.552" Width="658.217" Closing="MainWindow_Closing"
         WindowStartupLocation="CenterScreen">
     <Grid Height="{Binding ElementName = login_form, Path = Height}" VerticalAlignment="Top">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="33*"/>
-            <RowDefinition Height="268*"/>
-        </Grid.RowDefinitions>
-        <Label x:Name="lb_users_name" Content="Логин:" HorizontalAlignment="Left" Margin="36,27,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
-               FontSize="20" Grid.Row="1"/>
-        <Label x:Name="lb_pass" Content="Пароль:" HorizontalAlignment="Left" Margin="26,94,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
-               FontSize="20" RenderTransformOrigin="0.482,-0.273" Grid.Row="1"/>
-        <TextBox x:Name ="tb_login" HorizontalAlignment="Left" Margin="122,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="495"
+
+        <Label x:Name="lb_users_name" Content="Логин:" HorizontalAlignment="Left" Margin="45,49,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
+               FontSize="20"/>
+        <Label x:Name="lb_pass" Content="Пароль:" HorizontalAlignment="Left" Margin="35,116,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
+               FontSize="20" RenderTransformOrigin="0.482,-0.273"/>
+        <TextBox x:Name ="tb_login" HorizontalAlignment="Left" Margin="131,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="495"
                 FontSize="15" FontFamily ="Times New Roman" 
-                 Height ="{Binding ElementName = lb_users_name, Path = FontSize}" Grid.Row="1"/>
-        <PasswordBox x:Name="pb_pass" HorizontalAlignment="Left" Margin="122,102,0,0" VerticalAlignment="Top" Width="495"
+                 Height ="{Binding ElementName = lb_users_name, Path = FontSize}"/>
+        <PasswordBox x:Name="pb_pass" HorizontalAlignment="Left" Margin="131,124,0,0" VerticalAlignment="Top" Width="495"
                 FontSize="15" FontFamily ="Times New Roman" 
-                 Height ="{Binding ElementName = lb_pass, Path = FontSize}" Grid.Row="1"/>
-        <Button x:Name ="b_sign_up" Content="Зарегистрироваться" HorizontalAlignment="Left" Margin="122,153,0,0" VerticalAlignment="Top" Width="153" Height="42"
-                FontFamily="Times New Roman" FontSize="15" Click="b_sign_up_Click" Grid.Row="1"/>
-        <Button x:Name="b_enter" Content="Войти" HorizontalAlignment="Left" Margin="514,152.68,0,0" VerticalAlignment="Top" Width="103" Height="42"
-            FontFamily="Times New Roman" FontSize="15" Click="b_enter_Click" Grid.Row="1"/>
+                 Height ="{Binding ElementName = lb_pass, Path = FontSize}"/>
+        <Button x:Name ="b_sign_up" Content="Зарегистрироваться" HorizontalAlignment="Left" Margin="131,175,0,0" VerticalAlignment="Top" Width="153" Height="42"
+                FontFamily="Times New Roman" FontSize="15" Click="b_sign_up_Click"/>
+        <Button x:Name="b_enter" Content="Войти" HorizontalAlignment="Left" Margin="523,175,0,0" VerticalAlignment="Top" Width="103" Height="42"
+            FontFamily="Times New Roman" FontSize="15" Click="b_enter_Click"/>
     </Grid>
 </Window>

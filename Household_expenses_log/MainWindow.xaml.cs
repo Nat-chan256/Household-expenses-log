@@ -20,7 +20,7 @@ namespace Household_expenses_log
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IMainWindow
     {
         private SignUpWindow _sign_up_window;
         //Связь с базой данных
@@ -46,7 +46,7 @@ namespace Household_expenses_log
             _sign_up_window.Show();
         }
 
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        public void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             //Если окно было скрыто
             if (this.Visibility == Visibility.Hidden || this.Visibility == Visibility.Collapsed) return; //Выходим без вызова MessageBox

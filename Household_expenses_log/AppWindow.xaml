@@ -24,7 +24,7 @@
             <MenuItem Header="Выход"/>
         </Menu>
 
-        <Expander HorizontalAlignment="Left" Height="140" Margin="472,0,0,0" Width="178" VerticalAlignment="Top">
+        <Expander HorizontalAlignment="Left" Height="140" Margin="472,0,0,0" Width="178" VerticalAlignment="Top" Panel.ZIndex="1">
             <Expander.Header>
                 <Label x:Name="lb_user_login"/>
             </Expander.Header>
@@ -34,7 +34,7 @@
                 <Button Content="Мой профиль"/>
                 <Button Content="Редактировать"/>
                 <Button Content="Настройки"/>
-                <Button Content="Сменить аккаунт"/>
+                <Button Content="Сменить аккаунт" Click="b_change_acc_Click"/>
             </StackPanel>
         </Expander>
 
