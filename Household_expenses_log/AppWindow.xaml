@@ -15,7 +15,7 @@
                     <MenuItem Header="За месяц"/>
                     <MenuItem Header="За год"/>
                 </MenuItem>
-                <MenuItem Header="Сохранить историю"/>
+                <MenuItem Header="Сохранить историю" Click="mi_save_history_Click"/>
             </MenuItem>
             <MenuItem Header="Справка">
                 <MenuItem Header="Просмотреть справку"/>
@@ -39,10 +39,13 @@
         </Expander>
 
         <TabControl HorizontalAlignment="Left" Height="549" Margin="0,20,0,0" VerticalAlignment="Top" Width="650" SelectionChanged="tab_control_SelectionChanged">
-            <TabItem Header="История">
-                <StackPanel x:Name="sp_history">
-                </StackPanel>
+           <TabItem Header="История">
+                <ScrollViewer>
+                    <StackPanel x:Name="sp_history" Width="615">
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
+                    
             <TabItem Header="Статистика">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>

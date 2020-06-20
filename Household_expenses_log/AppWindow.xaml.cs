@@ -15,12 +15,13 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Animation;
+using Microsoft.Win32;
+using System.IO;
 
 namespace Household_expenses_log
 {
-    /// <summary>
-    /// Логика взаимодействия для AppWindow.xaml
-    /// </summary>
+    using Word = Microsoft.Office.Interop.Word;
+
     public partial class AppWindow : Window
     {
         private string _cur_user_login;
@@ -29,6 +30,7 @@ namespace Household_expenses_log
         private Image _selected_icon;
         private List<Label> _history;
         private int _cur_user_balance;
+        private delegate void _WriteToWordFileDelegate(string file_name, string text);
 
         public AppWindow(string cur_user_login)
         {
@@ -44,6 +46,9 @@ namespace Household_expenses_log
             MySqlCommand commandDatabase = new MySqlCommand(balance_query, databaseConnection);
             commandDatabase.CommandTimeout = 60;
             MySqlDataReader b_reader;
+
+            //Создаем таблицу "operations", если она ещё не создана
+            createTableOperations();
 
             //Вывод истории
             string history_query = $"SELECT * FROM `operations` WHERE `login` = '{_cur_user_login}';";
@@ -95,8 +100,16 @@ namespace Household_expenses_log
                 foreach(Label label in _history)
                 {
                     Border border = new Border();
-                    border.Background = Brushes.SkyBlue;
-                    border.BorderBrush = Brushes.DodgerBlue;
+                    if (label.Content.ToString().Contains("потрачено"))
+                    {
+                        border.Background = Brushes.SkyBlue;
+                        border.BorderBrush = Brushes.DodgerBlue;
+                    }
+                    else
+                    {
+                        border.Background = Brushes.YellowGreen;
+                        border.BorderBrush = Brushes.Green;
+                    }
                     border.Child = label;
                     border.Margin = new Thickness(10, 5, 20, 5);
                     border.BorderThickness = new Thickness(1);
@@ -307,7 +320,7 @@ namespace Household_expenses_log
                 lb_balance.Content = "Баланс: " + _cur_user_balance;
 
                 //Добавляем новую операцию в историю
-                InsertOperationIntoHistory(now.ToString("yyyy-MM-dd H:mm:ss"), spent_got, money_amount, _selected_icon.Tag.ToString());
+                InsertOperationIntoHistory(now.ToString(), spent_got, money_amount, _selected_icon.Tag.ToString());
             }
             catch (Exception ex)
             {
@@ -362,7 +375,98 @@ namespace Household_expenses_log
             _history.Add(cur_label);
             _history.Reverse();
 
-            //
+            //Размещаем новую запись в StackPanel
+            Border border = new Border();
+            if (spent_got == "потрачено") //Подбираем цвет рамки и фона в зависимости от операции
+            {
+                border.Background = Brushes.SkyBlue;
+                border.BorderBrush = Brushes.DodgerBlue;
+            }
+            else
+            {
+                border.Background = Brushes.YellowGreen;
+                border.BorderBrush = Brushes.Green;
+            }
+            border.Child = cur_label;
+            border.Margin = new Thickness(10, 5, 20, 5);
+            border.BorderThickness = new Thickness(1);
+            sp_history.Children.Insert(0, border);
+        }
+
+        //Создание таблицы "operations" в БД, если она ещё не создана
+        private void createTableOperations()
+        {
+            string query = "CREATE TABLE IF NOT EXISTS `operations` (login VARCHAR(30) NOT NULL, spent_got VARCHAR(15) NOT NULL, " +
+                "amount INT NOT NULL, category VARCHAR(40) NOT NULL, date DATETIME NOT NULL);";
+
+            MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
+            MySqlCommand command = new MySqlCommand(query, databaseConnection);
+            command.CommandTimeout = 60;
+            MySqlDataReader reader;
+
+            try
+            {
+                //Открытие базы данных
+                databaseConnection.Open();
+
+                //Исполнение запроса
+                reader = command.ExecuteReader();
+                reader.Close();
+                databaseConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        //Метод, сохраняющий текст в вордовский файл
+        private void SaveToWordFile(string file_name, string text)
+        {
+            //Открываем ворд на фоне
+            Word.Application app = new Word.Application();
+            app.Visible = false;
+            Word.Document doc = app.Documents.Add();
+            doc.Paragraphs[1].Range.Text = text;
+
+            for (int i = 1; i < doc.Paragraphs.Count; ++i)
+            {
+                doc.Paragraphs[i].Range.Font.Name = "Times New Roman";
+                doc.Paragraphs[i].Range.Font.Size = 14;
+            }
+
+            doc.SaveAs2(file_name);
+            doc.Close();
+            app.Quit();
+        }
+
+        private void mi_save_history_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog save_file_dialog = new SaveFileDialog();
+            save_file_dialog.Filter = "Text files (*.txt)|*.txt|Microsoft Word Files (*.doc)|*.doc|" +
+                "Microsoft Word Compressed Files (*.docx)|*.docx|All files (*.*)|*.*";
+
+            //Проверяем выбор пользователя
+            if (save_file_dialog.ShowDialog() == true && save_file_dialog.FileName.Length > 0)
+            {
+                //Записываем текст 
+                string text = String.Empty;
+                foreach (Label label in _history)
+                {
+                    text += label.Content.ToString() + "\n";
+                }
+
+                //Проверяем расширение файла
+                if (save_file_dialog.FileName.EndsWith(".txt"))
+                {
+                    File.WriteAllText(save_file_dialog.FileName, text);
+                }
+                else
+                {
+                    _WriteToWordFileDelegate d = new _WriteToWordFileDelegate(SaveToWordFile);
+                    d.BeginInvoke(save_file_dialog.FileName, text, null, null);   
+                }
+            }
         }
     }
 }

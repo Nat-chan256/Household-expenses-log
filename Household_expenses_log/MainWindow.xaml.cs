@@ -63,14 +63,25 @@ namespace Household_expenses_log
 
         private void b_enter_Click(object sender, RoutedEventArgs e)
         {
+            //Создаем бд с таблицей, если они не существуют
+            string create_db_query = "CREATE DATABASE IF NOT EXISTS `household_expenses_log`;";
+            string create_table_query = "CREATE TABLE IF NOT EXISTS `users` (name VARCHAR(30) NOT NULL, surname VARCHAR(30) NOT NULL," +
+                "login VARCHAR(30) NOT NULL, email VARCHAR(30) NOT NULL, password VARCHAR(20) NOT NULL, cur_budget INT DEFAULT 0);";
+
             //Ищем пользователя в бд
             string query = $"SELECT `password` FROM `users` WHERE `login` = '{tb_login.Text.ToLower().Trim(' ')}';";
 
             //Подготовка соединения
             MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
-            MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
-            commandDatabase.CommandTimeout = 60;
-            MySqlDataReader reader;
+            MySqlCommand create_db_command = new MySqlCommand(create_db_query, databaseConnection);
+            MySqlCommand create_table_command = new MySqlCommand(create_table_query, databaseConnection);
+            MySqlCommand select_command = new MySqlCommand(query, databaseConnection);
+            select_command.CommandTimeout = 60;
+            create_table_command.CommandTimeout = 60;
+            create_db_command.CommandTimeout = 60;
+            MySqlDataReader create_db_reader;
+            MySqlDataReader create_table_reader;
+            MySqlDataReader select_reader;
 
             try
             {
@@ -78,18 +89,31 @@ namespace Household_expenses_log
                 databaseConnection.Open();
 
                 //Исполнение запроса
-                reader = commandDatabase.ExecuteReader();
+                create_db_reader = select_command.ExecuteReader();
+                create_db_reader.Close();
+                create_table_reader = select_command.ExecuteReader();
+                create_table_reader.Close();
+                select_reader = select_command.ExecuteReader();
 
-                if (reader.HasRows) //Если нашелся пользователь с таким логином
+                if (select_reader.HasRows) //Если нашелся пользователь с таким логином
                 {
-                    reader.Read();
-                    if (reader.GetValue(0).ToString() == pb_pass.Password) //Если пароль введен верно
-                    { 
+                    select_reader.Read();
+                    if (select_reader.GetValue(0).ToString() == pb_pass.Password) //Если пароль введен верно
+                    {
                         this.Hide();
                         AppWindow app_window = new AppWindow(tb_login.Text);
                         app_window.Show(); //Открываем окно с приложением
                     }
+                    else 
+                    {
+                        MessageBox.Show("Пароль неверен.");
+                        //Закрываем соединение
+                        select_reader.Close();
+                        databaseConnection.Close();
+                        return;
+                    }
                     //Закрываем соединение
+                    select_reader.Close();
                     databaseConnection.Close();
                 }
                 else
@@ -105,6 +129,7 @@ namespace Household_expenses_log
                     }
 
                     //Закрываем соединение
+                    select_reader.Close();
                     databaseConnection.Close();
                 }
             }

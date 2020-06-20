@@ -17,6 +17,7 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using Label = System.Windows.Controls.Label;
 using MessageBox = System.Windows.MessageBox;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace Household_expenses_log
 {
@@ -33,6 +34,35 @@ namespace Household_expenses_log
         {
             InitializeComponent();
             _previous_window = previous_window;
+
+            CreateUsersTable();
+        }
+
+        //Создание таблицы с пользователями, если она не ещё не создана
+        private void CreateUsersTable()
+        {
+            string query = "CREATE TABLE IF NOT EXISTS `users` (name VARCHAR(30) NOT NULL, surname VARCHAR(30) NOT NULL," +
+                "login VARCHAR(30) NOT NULL, email VARCHAR(30) NOT NULL, password VARCHAR(20) NOT NULL, cur_budget INT DEFAULT 0);";
+
+            MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
+            MySqlCommand command = new MySqlCommand(query, databaseConnection);
+            command.CommandTimeout = 60;
+            MySqlDataReader reader;
+
+            try
+            {
+                //Открытие базы данных
+                databaseConnection.Open();
+
+                //Исполнение запроса
+                reader = command.ExecuteReader();
+                reader.Close();
+                databaseConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         //Метод, очищающий все поля в окне
@@ -181,63 +211,82 @@ namespace Household_expenses_log
 
         private void b_sign_up_Click(object sender, RoutedEventArgs e)
         {
+            bool sign_up_flag = true;//Флаг, определяющий, можно ли регистрировать пользователя
+
             //Проверка полей
             if (lb_warning1.Visibility == Visibility.Visible)
             {
-                MessageBox.Show("Введенное имя некорректно.");
-                return;
-            }
-            else if (lb_warning2.Visibility == Visibility.Visible)
-            {
-                MessageBox.Show("Введенный email некорректен.");
-                return;
-            }
-            else if (lb_warning3.Visibility == Visibility.Visible)
-            {
-                MessageBox.Show("Введенный пароль слишком короткий.");
-                return;
-            }
-            else if (lb_warning4.Visibility == Visibility.Visible)
-            {
-                MessageBox.Show("Введенные пароли не совпадают.");
-                return;
-            }
-            else if (lb_warning5.Visibility == Visibility.Visible)
-            {
-                MessageBox.Show("Введенная фамилия некорректна.");
-                return;
-            }
-            else if (tb_login.Text.Length == 0)
-            {
-                MessageBox.Show("Введите логин.");
-                return;
+                tb_users_name.BorderBrush = Brushes.Red;
+                tb_users_name.BorderThickness = new Thickness(3);
+                sign_up_flag = false;
             }
             else if (tb_users_name.Text.Length == 0)
             {
-                MessageBox.Show("Введите имя.");
-                return;
+                tb_users_name.BorderBrush = Brushes.Red;
+                tb_users_name.BorderThickness = new Thickness(3);
+                lb_enter_name.Visibility = Visibility.Visible;
+                sign_up_flag = false;
             }
-            else if (tb_surname.Text.Length == 0)
+
+            if (lb_warning2.Visibility == Visibility.Visible)
             {
-                MessageBox.Show("Введите фамилию.");
-                return;
+                tb_email.BorderBrush = Brushes.Red;
+                tb_email.BorderThickness = new Thickness(3);
+                sign_up_flag = false;
             }
             else if (tb_email.Text.Length == 0)
             {
-                MessageBox.Show("Введите email.");
-                return;
+                tb_email.BorderBrush = Brushes.Red;
+                tb_email.BorderThickness = new Thickness(3);
+                lb_enter_email.Visibility = Visibility.Visible;
+                sign_up_flag = false;
+            }
+
+            if (lb_warning3.Visibility == Visibility.Visible)
+            {
+                pb_pass.BorderBrush = Brushes.Red;
+                pb_pass.BorderThickness = new Thickness(3);
+                sign_up_flag = false;
             }
             else if (pb_pass.Password.Length == 0)
             {
-                MessageBox.Show("Введите пароль.");
-                return;
-            }
-            else if (pb_pass_repeat.Password.Length == 0)
-            {
-                MessageBox.Show("Введите пароль повторно.");
-                return;
+                pb_pass.BorderBrush = Brushes.Red;
+                pb_pass.BorderThickness = new Thickness(3);
+                lb_enter_pass.Visibility = Visibility.Visible;
+                sign_up_flag = false;
             }
 
+            if (lb_warning4.Visibility == Visibility.Visible)
+            {
+                pb_pass_repeat.BorderBrush = Brushes.Red;
+                pb_pass_repeat.BorderThickness = new Thickness(3);
+                sign_up_flag = false;
+            }
+
+            if (lb_warning5.Visibility == Visibility.Visible)
+            {
+                tb_surname.BorderBrush = Brushes.Red;
+                tb_surname.BorderThickness = new Thickness(3);
+                sign_up_flag = false;
+            }
+            else if (tb_surname.Text.Length == 0)
+            {
+                tb_surname.BorderBrush = Brushes.Red;
+                tb_surname.BorderThickness = new Thickness(3);
+                lb_enter_surname.Visibility = Visibility.Visible;
+                sign_up_flag = false;
+            }
+
+            if (tb_login.Text.Length == 0)
+            {
+                tb_login.BorderBrush = Brushes.Red;
+                tb_login.BorderThickness = new Thickness(3);
+                lb_enter_login.Visibility = Visibility.Visible;
+                sign_up_flag = false;
+            }
+
+            if (sign_up_flag == false) return;
+            
             //Проверяем, существует ли пользователь с введенным email
             if (userWithEmailExists(tb_email.Text))
             {
@@ -376,6 +425,40 @@ namespace Household_expenses_log
                 MessageBox.Show(ex.Message);
             }
             
+        }
+
+
+        //Метод, убирающий красные рамки с текстбоксов
+        private void tb_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is PasswordBox)
+            {
+                PasswordBox text_box = (PasswordBox)sender;
+                text_box.ClearValue(BorderBrushProperty);
+                text_box.BorderThickness = new Thickness(1);
+
+                foreach (object child in grid_layout.Children)
+                {
+                    if (!(child is Label)) continue;
+
+                    if (((Label)child).Tag.ToString() == text_box.Tag.ToString())
+                        ((Label)child).Visibility = Visibility.Hidden;
+                }
+            }
+            else
+            {
+                TextBox text_box = (TextBox)sender;
+                text_box.ClearValue(BorderBrushProperty);
+                text_box.BorderThickness = new Thickness(1);
+
+                foreach (object child in grid_layout.Children)
+                {
+                    if (!(child is Label)) continue;
+
+                    if (((Label)child).Tag.ToString() == text_box.Tag.ToString())
+                        ((Label)child).Visibility = Visibility.Hidden;
+                }
+            }
         }
     }
 }
