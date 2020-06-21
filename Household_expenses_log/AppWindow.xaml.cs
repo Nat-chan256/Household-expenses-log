@@ -477,5 +477,42 @@ namespace Household_expenses_log
             this.Hide();
             _change_acc_window.Show();
         }
+
+        private void mi_about_program_Click(object sender, RoutedEventArgs e)
+        {
+            AboutProgram about_prog_window = new AboutProgram();
+            about_prog_window.ShowDialog();
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl)) return;
+
+            switch (e.Key)
+            {
+                case Key.H:
+                    mi_save_history_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.W:
+                    mi_save_week_stat_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.M:
+                    mi_save_month_stat_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.Y:
+                    mi_save_year_stat_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.R:
+                    mi_watch_ref_Click(new object(), new RoutedEventArgs());
+                    break;
+                    case Key.H:
+                    mi_save_history_Click(new object(), new RoutedEventArgs());
+                    break;
+                    case Key.H:
+                    mi_save_history_Click(new object(), new RoutedEventArgs());
+                    break;
+
+            }
+        }
     }
 }

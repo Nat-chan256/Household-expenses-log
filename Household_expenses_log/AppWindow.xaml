@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Household_expenses_log"
         mc:Ignorable="d"
         Title="Учет домашних расходов" Height="600" Width="658.217" Closing="AppWindow_Closing"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown">
+    
     <Grid>
         <Menu HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="472">
             <MenuItem Header="Файл">
@@ -19,7 +20,7 @@
             </MenuItem>
             <MenuItem Header="Справка">
                 <MenuItem Header="Просмотреть справку"/>
-                <MenuItem Header="О программе"/>
+                <MenuItem Header="О программе" Click="mi_about_program_Click"/>
             </MenuItem>
             <MenuItem Header="Выход"/>
         </Menu>
@@ -29,7 +30,7 @@
                 <Label x:Name="lb_user_login"/>
             </Expander.Header>
 
-            <StackPanel HorizontalAlignment="Left" Height="121" Margin="0,0,-2,0" Width="178" VerticalAlignment="Top" >
+            <StackPanel HorizontalAlignment="Left" Height="121" Margin="0,0,-2,0" Width="178" VerticalAlignment="Top" Background="White">
                 <Label x:Name="lb_balance" Content="Баланс: " HorizontalAlignment="Center" />
                 <Button Content="Мой профиль"/>
                 <Button Content="Редактировать"/>

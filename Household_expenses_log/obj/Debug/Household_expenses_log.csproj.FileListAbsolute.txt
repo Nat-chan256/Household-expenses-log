@@ -43,3 +43,5 @@ C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expen
 C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\obj\Debug\AppWindow.baml
 C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\obj\Debug\Interop.ACTIVEXLib.dll
 C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\obj\Debug\Household_expenses_log.csproj.ResolveComReference.cache
+C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\obj\Debug\AboutProgram.g.cs
+C:\Учёбка и не учёбка\Проги\Git Repositories\Household-expenses-log\Household_expenses_log\obj\Debug\AboutProgram.baml
