@@ -19,10 +19,10 @@
                 <MenuItem Header="Сохранить историю" Click="mi_save_history_Click"/>
             </MenuItem>
             <MenuItem Header="Справка">
-                <MenuItem Header="Просмотреть справку"/>
+                <MenuItem Header="Просмотреть справку" Click="mi_watch_ref_Click"/>
                 <MenuItem Header="О программе" Click="mi_about_program_Click"/>
             </MenuItem>
-            <MenuItem Header="Выход"/>
+            <MenuItem Header="Выход" Click="mi_exit_Click"/>
         </Menu>
 
         <Expander HorizontalAlignment="Left" Height="140" Margin="472,0,0,0" Width="178" VerticalAlignment="Top" Panel.ZIndex="1">
@@ -48,7 +48,18 @@
             </TabItem>
                     
             <TabItem Header="Статистика">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid>
+                    <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Margin="10,10,0,0">
+                        <ComboBoxItem Content="За неделю" IsSelected="True"/>
+                        <ComboBoxItem Content="За месяц"/>
+                        <ComboBoxItem Content="За год"/>
+                    </ComboBox>
+                    <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Margin="305,10,0,0">
+                        <ComboBoxItem Content="Расходы" IsSelected="True"/>
+                        <ComboBoxItem Content="Доходы"/>
+                    </ComboBox>
+
+                </Grid>
             </TabItem>
             <TabItem Header="Добавить операцию">
                 <Grid>

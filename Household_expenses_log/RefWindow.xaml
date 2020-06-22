@@ -1,0 +1,31 @@
+﻿<Window x:Class="Household_expenses_log.RefWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Household_expenses_log"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="Справка" Height="300" Width="400">
+    <Grid>
+        <ScrollViewer>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Times New Roman" FontSize="16"
+                   Text="&#x0A;Данная программа предназначена для ведения учета расходов и доходов. 
+                   &#x0A;&#x0A;Во вкладке &quot;История&quot; пользователь может посмотреть историю совершенных им операций. Под операцией в данном 
+случае подразумевается запись об изменении бюджета.
+                   &#x0A;Записи о расходах отмечаются синим цветом, о доходах - зеленым.
+                   &#x0A;&#x0A;Вкладка &quot;Статистика&quot; содержит диаграммы, показывающие, какая часть бюджета тратится на каждую из категорий,
+а также - каковы основные источники доходов.
+                   &#x0A;&#x0A;Вкладка &quot;Добавить операцию&quot;, как и следует из названия, позволяет пользователю добавить запись об 
+изменении бюджета. Текущее значение баланса, а также история обновляются динамически по мере добавления операций. 
+                   &#x0A;&#x0A;Меню содержит три кнопки.
+                   &#x0A;Кнопка &quot;Файл&quot; позволяет сохранять статистику и историю в файл одного из следующих расширений: .txt, .doc либо 
+.docx.
+                   &#x0A;Во вкладке &quot;Справка&quot; хранится информация об авторе (см. &quot;О программе&quot;), а также, (что очевидно)
+данная справка.
+                   &#x0A;Кнопка &quot;Выход&quot; позволяет закрыть программу, предварительно спросив пользователя, уверен ли он в своих
+действиях.
+                   &#x0A;&#x0A;Приятного пользования :)" 
+                   VerticalAlignment="Top"/>
+        </ScrollViewer>
+    </Grid>
+</Window>

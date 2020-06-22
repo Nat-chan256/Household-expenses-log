@@ -153,7 +153,10 @@ namespace Household_expenses_log
             MessageBoxResult dialog_result = MessageBox.Show("Закрыть приложение?", "Завершение работы", MessageBoxButton.YesNo);
 
             if (dialog_result == MessageBoxResult.Yes)
+            {
+                this.Visibility = Visibility.Hidden;
                 Application.Current.Shutdown(); //Завершаем работу приложения
+            }
             else
             {
                 e.Cancel = true;
@@ -484,35 +487,47 @@ namespace Household_expenses_log
             about_prog_window.ShowDialog();
         }
 
+        private void mi_watch_ref_Click(object sender, RoutedEventArgs e)
+        {
+            RefWindow ref_window = new RefWindow();
+            ref_window.ShowDialog();
+        }
+
+        private void mi_exit_Click(object sender, RoutedEventArgs e)
+        {
+            AppWindow_Closing(new object(), new System.ComponentModel.CancelEventArgs());
+        }
+
+        //Обработчик события нажатия горячих клавиш
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl)) return;
 
-            switch (e.Key)
-            {
-                case Key.H:
-                    mi_save_history_Click(new object(), new RoutedEventArgs());
-                    break;
-                case Key.W:
-                    mi_save_week_stat_Click(new object(), new RoutedEventArgs());
-                    break;
-                case Key.M:
-                    mi_save_month_stat_Click(new object(), new RoutedEventArgs());
-                    break;
-                case Key.Y:
-                    mi_save_year_stat_Click(new object(), new RoutedEventArgs());
-                    break;
-                case Key.R:
-                    mi_watch_ref_Click(new object(), new RoutedEventArgs());
-                    break;
-                    case Key.H:
-                    mi_save_history_Click(new object(), new RoutedEventArgs());
-                    break;
-                    case Key.H:
-                    mi_save_history_Click(new object(), new RoutedEventArgs());
-                    break;
+            //switch (e.Key)
+            //{
+            //    case Key.H:
+            //        mi_save_history_Click(new object(), new RoutedEventArgs());
+            //        break;
+            //    case Key.W:
+            //        mi_save_week_stat_Click(new object(), new RoutedEventArgs());
+            //        break;
+            //    case Key.M:
+            //        mi_save_month_stat_Click(new object(), new RoutedEventArgs());
+            //        break;
+            //    case Key.Y:
+            //        mi_save_year_stat_Click(new object(), new RoutedEventArgs());
+            //        break;
+            //    case Key.R:
+            //        mi_watch_ref_Click(new object(), new RoutedEventArgs());
+            //        break;
+            //    case Key.A:
+            //        mi_about_program_Click(new object(), new RoutedEventArgs());
+            //        break;
+            //    case Key.E:
+            //        mi_exit_Click(new object(), new RoutedEventArgs());
+            //        break;
 
-            }
+            //}
         }
     }
 }
