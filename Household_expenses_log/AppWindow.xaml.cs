@@ -24,6 +24,8 @@ namespace Household_expenses_log
 {
     using Word = Microsoft.Office.Interop.Word;
 
+    enum StatisticsPeriod { Week, Month, Year }; //Период для статистики
+
     public partial class AppWindow : Window
     {
         private string _cur_user_login;
@@ -40,40 +42,62 @@ namespace Household_expenses_log
         {
             InitializeComponent();
 
-            _cur_user_login = cur_user_login;
+            _cur_user_login = cur_user_login.Trim(' ');
             lb_user_login.Content = cur_user_login;
             _spent_icons = new List<Image>();
             _change_acc_window = new ChangeAccWindow(this);
 
+            //Устанавливаем текущее значение баланса
+            setBalance(_cur_user_login);
+
+            //Создаем таблицу "operations", если она ещё не создана
+            createTableOperations();
+            
+            //Вывод истории
+            setHistory(_cur_user_login);
+
+            //Настройка статистики
+            _chart_source = new Dictionary<string, int>();
+            setStatistics(StatisticsPeriod.Week);
+        }
+
+        private void setBalance(string login)
+        {
             //Ищем баланс пользователя в базе данных
-            string balance_query = $"SELECT `cur_budget` FROM `users` WHERE `login` = '{_cur_user_login}';";
+            string balance_query = $"SELECT `cur_budget` FROM `users` WHERE `login` = '{login}';";
 
             MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
             MySqlCommand commandDatabase = new MySqlCommand(balance_query, databaseConnection);
             commandDatabase.CommandTimeout = 60;
             MySqlDataReader b_reader;
 
-            //Создаем таблицу "operations", если она ещё не создана
-            createTableOperations();
+            try
+            {
+                databaseConnection.Open();
+                b_reader = commandDatabase.ExecuteReader();
+                b_reader.Read();
+                _cur_user_balance = (int)b_reader.GetValue(0);
+                lb_balance.Content = "Баланс: " + _cur_user_balance.ToString();
+                b_reader.Close();
+                databaseConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
-            //Вывод истории
-            string history_query = $"SELECT * FROM `operations` WHERE `login` = '{_cur_user_login}';";
+        private void setHistory(string login)
+        {
+            MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
+            string history_query = $"SELECT * FROM `operations` WHERE `login` = '{login}';";
             MySqlCommand history_command = new MySqlCommand(history_query, databaseConnection);
             history_command.CommandTimeout = 60;
             MySqlDataReader history_reader;
 
             try
             {
-                //Открытие базы данных
                 databaseConnection.Open();
-
-                //Вывод баланса
-                b_reader = commandDatabase.ExecuteReader();
-                b_reader.Read();
-                _cur_user_balance = (int)b_reader.GetValue(0);
-                lb_balance.Content = "Баланс: " + _cur_user_balance.ToString();
-                b_reader.Close();
-
                 //Вывод истории
                 history_reader = history_command.ExecuteReader();
 
@@ -103,7 +127,7 @@ namespace Household_expenses_log
                     _history.Add(cur_label);
                 }
                 _history.Reverse();
-                foreach(Label label in _history)
+                foreach (Label label in _history)
                 {
                     Border border = new Border();
                     if (label.Content.ToString().Contains("потрачено"))
@@ -122,12 +146,72 @@ namespace Household_expenses_log
                     sp_history.Children.Add(border);
                 }
 
-                databaseConnection.Close(); 
+                databaseConnection.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void setStatistics(StatisticsPeriod period)
+        {
+        //    if (_history.Count == 0) //Если операций нет
+        //        return; //То показывать нечего
+
+        //    _chart_source.Clear();
+        //    //Заполняем источник данных для диаграммы
+        //    foreach (Label label in _history)
+        //    {
+        //        //Разбиваем текст каждой записи на массив слов
+        //        string[] label_text = label.Content.ToString().Split(new char[] { ' ' });
+
+        //        //Проверка, совпадает ли критерий "Получено/Потрачено"
+        //        if (((ComboBoxItem)cb_expenses_income.SelectedItem).Content.ToString().ToLower() == "расходы" && label_text[2] == "получено"
+        //            || ((ComboBoxItem)cb_expenses_income.SelectedItem).Content.ToString().ToLower() == "доходы" && label_text[2] == "потрачено")
+        //            continue;
+
+        //        //Проверяем, входит ли дата операции в нужный периодW
+        //        if (!dateIsSuitable(label_text[0], period)) break;
+
+        //        //Проверяем, добавлена ли текущая категория в диаграмму
+        //        if (categoryExists(_chart_source, label_text)) //Если категория уже есть в диаграмме
+        //        {
+        //            //То обновляем существующее значение
+        //            string key = label_text[6]; //Собираем в одну строку название категории
+        //            for (int i = 7; i < label_text.Length; ++i)
+        //            {
+        //                key += " " + label_text[i];
+        //            }
+
+        //            _chart_source[key] += Int32.Parse(label_text[3]);
+        //        }
+        //        else
+        //        {
+        //            //Иначе - добавляем новый элемент
+        //            string key = label_text[6]; //Собираем в одну строку название категории
+        //            for (int i = 7; i < label_text.Length; ++i)
+        //            {
+        //                key += " " + label_text[i];
+        //            }
+        //            _chart_source.Add(key, Int32.Parse(label_text[3]));
+        //        }
+        //    }
+
+        //    if (_chart_source.Count == 0) //Если не нашлось подходящих записей
+        //        return; //нечего рисовать на диаграмме
+
+        //    ch_statistics.DataSource = _chart_source;
+
+        //    //chart.Series["series"].Points.AddXY("Развлечения", "33");
+        //    //chart.Series["series"].Points.AddXY("Медицина", "34");
+        //    //chart.Series["series"].Points.AddXY("Товары для дома", "33");
+
+        //    //Настройка легенды
+        //    ch_statistics.Legends.Add(new Legend("Legend"));
+        //    ch_statistics.Series["series"].Legend = "Legend";
+        //    ch_statistics.Series["series"].IsVisibleInLegend = true;
+        //    ch_statistics.Series["series"]["PieLabelStyle"] = "Disabled";
         }
 
         private void AppWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -536,22 +620,83 @@ namespace Household_expenses_log
 
         private void ti_stats_GotFocus(object sender, RoutedEventArgs e)
         {
-            //Настраиваем диаграмму
-            _chart_source = new Dictionary<string, int>();
             
+        }
 
 
-            Chart chart = this.FindName("MyWinformChart") as Chart;
-            //chart.DataSource = value;
+        //-------------------------------Вспомогательные методы----------------------------------------
 
-            chart.Series["series"].Points.AddXY("Развлечения", "33");
-            chart.Series["series"].Points.AddXY("Медицина", "34");
-            chart.Series["series"].Points.AddXY("Товары для дома", "33");
+        //Проверка, входит ли дата в указанный период
+        private bool dateIsSuitable(string date, StatisticsPeriod period)
+        {
+            //Разбиваем строку с датой на день, месяц и год
+            string[] sep_date = date.Split(new char[] { '.' });
 
-            chart.Legends.Add(new Legend("Legend"));
-            chart.Series["series"].Legend = "Legend";
-            chart.Series["series"].IsVisibleInLegend = true;
-            chart.Series["series"]["PieLabelStyle"] = "Disabled";
+            //Вычисляем текущую дату
+            DateTime now = DateTime.Now;
+            //Разбиваем now на дату и время
+            string[] date_time = now.ToString("dd.MM.yyyy H:mm:ss").Split(new char[] { ' ' });
+            //Разбиваем дату на день, месяц и год
+            string[] cur_date = date_time[0].Split(new char[] { '.' });
+
+            switch (period)
+            {
+                case StatisticsPeriod.Week:
+                    return periodNoMoreThanWeek(sep_date, cur_date);  
+                case StatisticsPeriod.Month:
+                    return periodNoMoreThanMonth(sep_date, cur_date);
+                default:
+                    return periodNoMoreThanYear(sep_date, cur_date);
+            }
+        }
+
+        //Возвращает true, если промежуток времени между last_date и cur_date меньше либо равен неделе
+        private bool periodNoMoreThanWeek(string[] last_date, string[] cur_date)
+        {
+            int cur_month = Int32.Parse(cur_date[1]);
+            int last_month = Int32.Parse(last_date[1]);
+            int cur_day = Int32.Parse(cur_date[0]);
+            int last_day = Int32.Parse(last_date[0]);
+            int last_year = Int32.Parse(last_date[2]);
+            int cur_year = Int32.Parse(cur_date[2]);
+
+            if (cur_month == last_month && last_year == cur_year) //Если месяцы совпадают
+            {
+                if (cur_day - last_day <= 7) return true;
+                else return false;
+            }
+            else if (cur_month == last_month + 1 && last_year == cur_year
+                || cur_month == 1 && last_month == 12 && cur_year == last_year + 1) //Иначе если месяцы "смежны"
+            {
+                if (cur_day > 7) return false;
+                else if (cur_day + (daysInMonth(cur_month) - cur_day) <= 7) return true;
+                else return false;
+            }
+            else
+                return false;
+            
+        }
+
+        //Возвращает true, если промежуток времени между last_date и cur_date меньше либо равен месяцу
+        private bool periodNoMoreThanMonth(string[] last_date, string[] cur_date)
+        {
+            int cur_month = Int32.Parse(cur_date[1]);
+            int last_month = Int32.Parse(last_date[1]);
+            int cur_day = Int32.Parse(cur_date[0]);
+            int last_day = Int32.Parse(last_date[0]);
+            int last_year = Int32.Parse(last_date[2]);
+            int cur_year = Int32.Parse(cur_date[2]);
+
+            if (cur_month == last_month && cur_year == last_year)//Если месяцы совпадают
+                return true;
+            else if (cur_month == last_month + 1 && )
+        }
+
+        private int daysInMonth(int month_num)
+        {
+            if (month_num == 2) return 28;
+            else if (month_num == 4 || month_num == 6 || month_num == 9 || month_num == 11) return 30;
+            else return 31;
         }
     }
 }
