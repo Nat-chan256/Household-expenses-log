@@ -17,6 +17,8 @@ using System.Runtime.CompilerServices;
 using System.Windows.Media.Animation;
 using Microsoft.Win32;
 using System.IO;
+using System.Windows.Forms.Integration;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Household_expenses_log
 {
@@ -32,10 +34,12 @@ namespace Household_expenses_log
         private int _cur_user_balance;
         private delegate void _WriteToWordFileDelegate(string file_name, string text);
         private ChangeAccWindow _change_acc_window;
+        private Dictionary<string, int> _chart_source;
 
         public AppWindow(string cur_user_login)
         {
             InitializeComponent();
+
             _cur_user_login = cur_user_login;
             lb_user_login.Content = cur_user_login;
             _spent_icons = new List<Image>();
@@ -528,6 +532,26 @@ namespace Household_expenses_log
             //        break;
 
             //}
+        }
+
+        private void ti_stats_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //Настраиваем диаграмму
+            _chart_source = new Dictionary<string, int>();
+            
+
+
+            Chart chart = this.FindName("MyWinformChart") as Chart;
+            //chart.DataSource = value;
+
+            chart.Series["series"].Points.AddXY("Развлечения", "33");
+            chart.Series["series"].Points.AddXY("Медицина", "34");
+            chart.Series["series"].Points.AddXY("Товары для дома", "33");
+
+            chart.Legends.Add(new Legend("Legend"));
+            chart.Series["series"].Legend = "Legend";
+            chart.Series["series"].IsVisibleInLegend = true;
+            chart.Series["series"]["PieLabelStyle"] = "Disabled";
         }
     }
 }

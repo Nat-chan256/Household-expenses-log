@@ -1,5 +1,7 @@
 ﻿<Window x:Class="Household_expenses_log.AppWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+         xmlns:winformchart="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,7 +9,7 @@
         mc:Ignorable="d"
         Title="Учет домашних расходов" Height="600" Width="658.217" Closing="AppWindow_Closing"
         WindowStartupLocation="CenterScreen" KeyDown="Window_KeyDown">
-    
+
     <Grid>
         <Menu HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="472">
             <MenuItem Header="Файл">
@@ -40,14 +42,14 @@
         </Expander>
 
         <TabControl HorizontalAlignment="Left" Height="549" Margin="0,20,0,0" VerticalAlignment="Top" Width="650" SelectionChanged="tab_control_SelectionChanged">
-           <TabItem Header="История">
+            <TabItem Header="История">
                 <ScrollViewer>
                     <StackPanel x:Name="sp_history" Width="615">
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-                    
-            <TabItem Header="Статистика">
+
+            <TabItem Header="Статистика" GotFocus="ti_stats_GotFocus">
                 <Grid>
                     <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Margin="10,10,0,0">
                         <ComboBoxItem Content="За неделю" IsSelected="True"/>
@@ -58,16 +60,25 @@
                         <ComboBoxItem Content="Расходы" IsSelected="True"/>
                         <ComboBoxItem Content="Доходы"/>
                     </ComboBox>
-
+                    <WindowsFormsHost Margin="33,78,192,158">
+                        <winformchart:Chart x:Name="MyWinformChart" Dock="Fill">
+                            <winformchart:Chart.Series>
+                                <winformchart:Series Name="series" ChartType="Pie"/>
+                            </winformchart:Chart.Series>
+                            <winformchart:Chart.ChartAreas>
+                                <winformchart:ChartArea/>
+                            </winformchart:Chart.ChartAreas>
+                        </winformchart:Chart>
+                    </WindowsFormsHost>
                 </Grid>
             </TabItem>
             <TabItem Header="Добавить операцию">
                 <Grid>
                     <Label Content="Введите сумму:" HorizontalAlignment="Left" Margin="4,46,0,0" VerticalAlignment="Top" FontSize="18"/>
-                    
+
                     <TextBox x:Name="tb_sum" HorizontalAlignment="Left" Height="27" Margin="145,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="216"
                             FontSize="18" TextChanged="tb_sum_TextChanged" BorderBrush="Black" BorderThickness="1" GotFocus="tb_sum_GotFocus"/>
-                    
+
                     <Label Content="₽" HorizontalAlignment="Left" Margin="366,46,0,0" VerticalAlignment="Top" FontSize="20"/>
                     <Label x:Name="lb_warning" Content="Заполните поле" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="207,80,0,0"
                            Foreground="Red" Opacity="0"/>
