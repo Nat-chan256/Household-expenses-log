@@ -14,7 +14,7 @@
         <Menu HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="472">
             <MenuItem Header="Файл">
                 <MenuItem Header="Сохранить статистику">
-                    <MenuItem Header="За неделю"/>
+                    <MenuItem Header="За неделю" Click="mi_save_week_stat_Click"/>
                     <MenuItem Header="За месяц"/>
                     <MenuItem Header="За год"/>
                 </MenuItem>
@@ -51,8 +51,8 @@
 
             <TabItem Header="Статистика" GotFocus="ti_stats_GotFocus">
                 <Grid>
-                    <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Margin="10,10,0,0">
-                        <ComboBoxItem Content="За неделю" IsSelected="True"/>
+                    <ComboBox x:Name="cb_period" HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Margin="10,10,0,0">
+                        <ComboBoxItem x:Name="cbi_week" Content="За неделю" IsSelected="True"/>
                         <ComboBoxItem Content="За месяц"/>
                         <ComboBoxItem Content="За год"/>
                     </ComboBox>
@@ -60,7 +60,7 @@
                         <ComboBoxItem Content="Расходы" IsSelected="True"/>
                         <ComboBoxItem Content="Доходы"/>
                     </ComboBox>
-                    <WindowsFormsHost Margin="33,78,192,158">
+                    <WindowsFormsHost Margin="33,78,37,135">
                         <winformchart:Chart x:Name="ch_statistics" Dock="Fill">
                             <winformchart:Chart.Series>
                                 <winformchart:Series Name="series" ChartType="Pie"/>
@@ -70,6 +70,12 @@
                             </winformchart:Chart.ChartAreas>
                         </winformchart:Chart>
                     </WindowsFormsHost>
+
+                    <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="34,391,0,0"
+                           FontSize="14" FontFamily="Times New Roman" Width="580">
+                        <AccessText x:Name="lb_statistics" TextWrapping="WrapWithOverflow">
+                        </AccessText>
+                    </Label>
                 </Grid>
             </TabItem>
             <TabItem Header="Добавить операцию">

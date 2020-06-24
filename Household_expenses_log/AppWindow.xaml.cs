@@ -23,6 +23,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 namespace Household_expenses_log
 {
     using Word = Microsoft.Office.Interop.Word;
+    using Color = System.Drawing.Color;
 
     enum StatisticsPeriod { Week, Month, Year }; //Период для статистики
 
@@ -61,6 +62,7 @@ namespace Household_expenses_log
             setStatistics(StatisticsPeriod.Week);
         }
 
+//-----------------------Методы, динамические изменяющие внешние данные-----------------------------------------------------------------------
         private void setBalance(string login)
         {
             //Ищем баланс пользователя в базе данных
@@ -156,62 +158,65 @@ namespace Household_expenses_log
 
         private void setStatistics(StatisticsPeriod period)
         {
-        //    if (_history.Count == 0) //Если операций нет
-        //        return; //То показывать нечего
+            if (_history.Count == 0) //Если операций нет
+                return; //То показывать нечего
 
-        //    _chart_source.Clear();
-        //    //Заполняем источник данных для диаграммы
-        //    foreach (Label label in _history)
-        //    {
-        //        //Разбиваем текст каждой записи на массив слов
-        //        string[] label_text = label.Content.ToString().Split(new char[] { ' ' });
+            _chart_source.Clear();
+            //Заполняем источник данных для диаграммы
+            foreach (Label label in _history)
+            {
+                //Разбиваем текст каждой записи на массив слов
+                string[] label_text = label.Content.ToString().Split(new char[] { ' ' });
 
-        //        //Проверка, совпадает ли критерий "Получено/Потрачено"
-        //        if (((ComboBoxItem)cb_expenses_income.SelectedItem).Content.ToString().ToLower() == "расходы" && label_text[2] == "получено"
-        //            || ((ComboBoxItem)cb_expenses_income.SelectedItem).Content.ToString().ToLower() == "доходы" && label_text[2] == "потрачено")
-        //            continue;
+                //Проверка, совпадает ли критерий "Получено/Потрачено"
+                if (((ComboBoxItem)cb_expenses_income.SelectedItem).Content.ToString().ToLower() == "расходы" && label_text[2] == "получено"
+                    || ((ComboBoxItem)cb_expenses_income.SelectedItem).Content.ToString().ToLower() == "доходы" && label_text[2] == "потрачено")
+                    continue;
 
-        //        //Проверяем, входит ли дата операции в нужный периодW
-        //        if (!dateIsSuitable(label_text[0], period)) break;
+                //Проверяем, входит ли дата операции в нужный периодW
+                if (!dateIsSuitable(label_text[0], period)) break;
 
-        //        //Проверяем, добавлена ли текущая категория в диаграмму
-        //        if (categoryExists(_chart_source, label_text)) //Если категория уже есть в диаграмме
-        //        {
-        //            //То обновляем существующее значение
-        //            string key = label_text[6]; //Собираем в одну строку название категории
-        //            for (int i = 7; i < label_text.Length; ++i)
-        //            {
-        //                key += " " + label_text[i];
-        //            }
+                //Проверяем, добавлена ли текущая категория в диаграмму
+                if (categoryExists(_chart_source, label_text)) //Если категория уже есть в диаграмме
+                {
+                    //То обновляем существующее значение
+                    string key = label_text[6]; //Собираем в одну строку название категории
+                    for (int i = 7; i < label_text.Length; ++i)
+                    {
+                        key += " " + label_text[i];
+                    }
 
-        //            _chart_source[key] += Int32.Parse(label_text[3]);
-        //        }
-        //        else
-        //        {
-        //            //Иначе - добавляем новый элемент
-        //            string key = label_text[6]; //Собираем в одну строку название категории
-        //            for (int i = 7; i < label_text.Length; ++i)
-        //            {
-        //                key += " " + label_text[i];
-        //            }
-        //            _chart_source.Add(key, Int32.Parse(label_text[3]));
-        //        }
-        //    }
+                    _chart_source[key] += Int32.Parse(label_text[3]);
+                }
+                else
+                {
+                    //Иначе - добавляем новый элемент
+                    string key = label_text[6]; //Собираем в одну строку название категории
+                    for (int i = 7; i < label_text.Length; ++i)
+                    {
+                        key += " " + label_text[i];
+                    }
+                    _chart_source.Add(key, Int32.Parse(label_text[3]));
+                }
+            }
 
-        //    if (_chart_source.Count == 0) //Если не нашлось подходящих записей
-        //        return; //нечего рисовать на диаграмме
+            if (_chart_source.Count == 0) //Если не нашлось подходящих записей
+                return; //нечего рисовать на диаграмме
 
-        //    ch_statistics.DataSource = _chart_source;
+            Dictionary<string, int>.KeyCollection key_coll = _chart_source.Keys;
+            foreach (string key in key_coll)
+            {
+                ch_statistics.Series["series"].Points.AddXY(key, _chart_source[key]);
+            }
 
-        //    //chart.Series["series"].Points.AddXY("Развлечения", "33");
-        //    //chart.Series["series"].Points.AddXY("Медицина", "34");
-        //    //chart.Series["series"].Points.AddXY("Товары для дома", "33");
+            //Настройка легенды
+            setLegend(ch_statistics, "series", "Legend");
 
-        //    //Настройка легенды
-        //    ch_statistics.Legends.Add(new Legend("Legend"));
-        //    ch_statistics.Series["series"].Legend = "Legend";
-        //    ch_statistics.Series["series"].IsVisibleInLegend = true;
-        //    ch_statistics.Series["series"]["PieLabelStyle"] = "Disabled";
+            //Настройка цветов
+            setColors(ch_statistics);
+
+            //Настройка текста под графиком
+            setStatisticsText(_chart_source);
         }
 
         private void AppWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -533,6 +538,7 @@ namespace Household_expenses_log
             app.Quit();
         }
 
+//-------------------------Обработчики события нажатия menuItems-------------------------------------------------------------------
         private void mi_save_history_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog save_file_dialog = new SaveFileDialog();
@@ -562,11 +568,10 @@ namespace Household_expenses_log
             }
         }
 
-        private void b_change_acc_Click(object sender, RoutedEventArgs e)
+        private void mi_save_week_stat_Click(object sender, RoutedEventArgs e)
         {
-            _change_acc_window.ClearAllFields();
-            this.Hide();
-            _change_acc_window.Show();
+            ComboBoxItem item = FindName("cbi_week") as ComboBoxItem;
+            cb_period.SelectedItem = item;
         }
 
         private void mi_about_program_Click(object sender, RoutedEventArgs e)
@@ -585,6 +590,17 @@ namespace Household_expenses_log
         {
             AppWindow_Closing(new object(), new System.ComponentModel.CancelEventArgs());
         }
+
+
+
+        private void b_change_acc_Click(object sender, RoutedEventArgs e)
+        {
+            _change_acc_window.ClearAllFields();
+            this.Hide();
+            _change_acc_window.Show();
+        }
+
+      
 
         //Обработчик события нажатия горячих клавиш
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -689,7 +705,26 @@ namespace Household_expenses_log
 
             if (cur_month == last_month && cur_year == last_year)//Если месяцы совпадают
                 return true;
-            else if (cur_month == last_month + 1 && )
+            else if ((cur_month == last_month + 1 && cur_year == last_year || cur_month == 1 && last_month == 12 && cur_year == last_month + 1)
+                && cur_day + (31 - last_day) <= 31)
+                return true;
+            else
+                return false;
+        }
+
+        //Возвращает true, если промежуток времени между last_date и cur_date меньше либо равен году
+        private bool periodNoMoreThanYear(string[] last_date, string[] cur_date)
+        {
+            int cur_month = Int32.Parse(cur_date[1]);
+            int last_month = Int32.Parse(last_date[1]);
+            int cur_day = Int32.Parse(cur_date[0]);
+            int last_day = Int32.Parse(last_date[0]);
+            int last_year = Int32.Parse(last_date[2]);
+            int cur_year = Int32.Parse(cur_date[2]);
+
+            if (cur_year == last_year) return true;
+            else if (cur_year == last_year + 1 && cur_month + (12 - last_month) <= 12) return true;
+            else return false;
         }
 
         private int daysInMonth(int month_num)
@@ -698,5 +733,48 @@ namespace Household_expenses_log
             else if (month_num == 4 || month_num == 6 || month_num == 9 || month_num == 11) return 30;
             else return 31;
         }
-    }
+
+        //Возвращает true, если среди ключей chart_source есть категория, которая хранится в label_text (т.е. все его элементы, начиная с шестого)
+        private bool categoryExists(Dictionary<string, int> chart_source, string[] label_text)
+        {
+            string category_name = label_text[6];
+            for (int i = 7; i < label_text.Length; ++i)
+            {
+                category_name += " " + label_text[i];
+            }
+
+            return chart_source.ContainsKey(category_name);
+        }
+
+        //Настройка легенды для графика chart
+        private void setLegend(Chart chart, string series_name, string legend_name)
+        {
+             chart.Legends.Add(new Legend(legend_name));
+             chart.Series[series_name].Legend = legend_name;
+             chart.Series[series_name].IsVisibleInLegend = true;
+             chart.Series[series_name]["PieLabelStyle"] = "Disabled";
+        }
+
+        private void setColors(Chart chart)
+        {
+            chart.Palette = ChartColorPalette.None;
+
+            chart.PaletteCustomColors = new Color[] {Color.FromName("HotPink"), Color.FromName("Gold"), Color.FromName("PowderBlue"),
+                Color.FromName("Plum"),  Color.FromName("OrangeRed"),  Color.FromName("MediumBlue"),  Color.FromName("Lavender"),  
+                Color.FromName("MistyRose"),  Color.FromName("DeepPink"),  Color.FromName("Orange"),  Color.FromName("SlateBlue"),  
+                Color.FromName("Red"), Color.FromName("Green"),  Color.FromName("Black")};
+        }
+
+        private void setStatisticsText(Dictionary<string, int> dictionary)
+        {
+            string content_of_lb = String.Empty;
+
+            Dictionary<string, int>.KeyCollection key_coll = dictionary.Keys;
+            foreach (string key in key_coll)
+            {
+                content_of_lb += key + ": " + dictionary[key] + "; ";
+            }
+            lb_statistics.Text = content_of_lb;
+        }
+    }   
 }
