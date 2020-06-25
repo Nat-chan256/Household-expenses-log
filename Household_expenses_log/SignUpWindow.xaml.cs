@@ -34,35 +34,6 @@ namespace Household_expenses_log
         {
             InitializeComponent();
             _previous_window = previous_window;
-
-            CreateUsersTable();
-        }
-
-        //Создание таблицы с пользователями, если она не ещё не создана
-        private void CreateUsersTable()
-        {
-            string query = "CREATE TABLE IF NOT EXISTS `users` (name VARCHAR(30) NOT NULL, surname VARCHAR(30) NOT NULL," +
-                "login VARCHAR(30) NOT NULL, email VARCHAR(30) NOT NULL, password VARCHAR(20) NOT NULL, cur_budget INT DEFAULT 0);";
-
-            MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
-            MySqlCommand command = new MySqlCommand(query, databaseConnection);
-            command.CommandTimeout = 60;
-            MySqlDataReader reader;
-
-            try
-            {
-                //Открытие базы данных
-                databaseConnection.Open();
-
-                //Исполнение запроса
-                reader = command.ExecuteReader();
-                reader.Close();
-                databaseConnection.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
 
         //Метод, очищающий все поля в окне
@@ -91,7 +62,6 @@ namespace Household_expenses_log
                 e.Cancel = true;
             }
         }
-
 
         //Методы, проверяющие корректность введенных данных
         private void tb_users_name_TextChanged(object sender, TextChangedEventArgs e)

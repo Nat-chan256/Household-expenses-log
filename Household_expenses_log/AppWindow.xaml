@@ -52,13 +52,13 @@
             <TabItem Header="Статистика" GotFocus="ti_stats_GotFocus">
                 <Grid>
                     <ComboBox x:Name="cb_period" HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Margin="10,10,0,0">
-                        <ComboBoxItem x:Name="cbi_week" Content="За неделю" IsSelected="True"/>
-                        <ComboBoxItem x:Name="cbi_month" Content="За месяц"/>
-                        <ComboBoxItem x:Name="cbi_year" Content="За год"/>
+                        <ComboBoxItem x:Name="cbi_week" Content="За неделю" IsSelected="True" Selected="cbi_week_Selected"/>
+                        <ComboBoxItem x:Name="cbi_month" Content="За месяц" Selected="cbi_month_Selected"/>
+                        <ComboBoxItem x:Name="cbi_year" Content="За год" Selected="cbi_year_Selected"/>
                     </ComboBox>
                     <ComboBox x:Name="cb_expenses_income" HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Margin="305,10,0,0">
-                        <ComboBoxItem Content="Расходы" IsSelected="True"/>
-                        <ComboBoxItem Content="Доходы"/>
+                        <ComboBoxItem Content="Расходы" IsSelected="True" Selected="cbi_expenses_Selected"/>
+                        <ComboBoxItem Content="Доходы" Selected="cbi_income_Selected"/>
                     </ComboBox>
                     <WindowsFormsHost Margin="33,78,37,135">
                         <winformchart:Chart x:Name="ch_statistics" Dock="Fill">
@@ -100,22 +100,28 @@
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img1" Tag="Обслуживание автомобиля" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_auto.png" 
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                        <Image x:Name="img1" Tag="Обслуживание автомобиля" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_auto.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown" 
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img2" Tag="Домашние животные" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_bone.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                        <Image x:Name="img2" Tag="Домашние животные" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_bone.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown" 
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img3" Tag="Шоппинг" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_clothes.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                        <Image x:Name="img3" Tag="Шоппинг" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_clothes.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown"
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
@@ -123,98 +129,123 @@
                                         </Border.BorderBrush>
                                         <Image x:Name="img4" Tag="Развлечения" Height="48" Width="48" Margin="5,5,0,0" 
                                                Source="Resources/icon_dance.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
-                                               MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown" 
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img5" Tag="Подарки" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_gift.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown" 
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img6" Tag="Бакалейные товары" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_grocery.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                        <Image x:Name="img6" Tag="Бакалейные товары" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_grocery.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown" 
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img7" Tag="Товары для дома" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_house.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                        <Image x:Name="img7" Tag="Товары для дома" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_house.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown" 
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img8" Tag="Дети" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_kid.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown"
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img9" Tag="Здоровье" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_medicine.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                        <Image x:Name="img9" Tag="Здоровье" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_medicine.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown" 
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img10" Tag="Общественный транспорт" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_public_transport.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                        <Image x:Name="img10" Tag="Общественный транспорт" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_public_transport.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave"
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown" 
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img11" Tag="Еда вне дома" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_restaurant.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                        <Image x:Name="img11" Tag="Еда вне дома" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_restaurant.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown" 
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img12" Tag="Образование" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_school.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                        <Image x:Name="img12" Tag="Образование" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_school.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown"
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img13" Tag="Счета и налоги" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_tax.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                        <Image x:Name="img13" Tag="Счета и налоги" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_tax.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown"
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img14" Tag="Другое" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_dots.png"
-                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                               MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown"
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                 </WrapPanel>
                             </StackPanel>
                         </TabItem>
                         <TabItem Header="Получено">
                             <StackPanel x:Name="stack_panel2">
-                                <Label x:Name="lb_choose_category2" Content="Выберите категорию" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" FontSize="18"/>
+                                <Label x:Name="lb_choose_category2" Content="Выберите категорию" HorizontalAlignment="Left" Margin="5,0,0,0" 
+                                       VerticalAlignment="Top" FontSize="18"/>
                                 <WrapPanel x:Name="wp_categories2" HorizontalAlignment="Left" Width="381" Margin="0,0,0,0" Visibility="Visible">
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
-                                        <Image x:Name="img15" Tag="Зарплата" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_salary.png"
-                                           MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                        <Image x:Name="img15" Tag="Зарплата" Height="48" Width="48" Margin="5,5,0,0" 
+                                               Source="Resources/icon_salary.png" MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" 
+                                               MouseLeftButtonDown="img_MouseLeftButtonDown"
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                     <Border BorderThickness="3">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="#53b8e0" Opacity="0"/>
                                         </Border.BorderBrush>
                                         <Image x:Name="img16" Tag="Другое" Height="48" Width="48" Margin="5,5,0,0" Source="Resources/icon_dots.png"
-                                           MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"/>
+                                           MouseEnter="img_MouseEnter" MouseLeave="img_MouseLeave" MouseLeftButtonDown="img_MouseLeftButtonDown"
+                                               ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Tag}"/>
                                     </Border>
                                 </WrapPanel>
                             </StackPanel>

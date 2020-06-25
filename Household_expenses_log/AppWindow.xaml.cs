@@ -41,6 +41,8 @@ namespace Household_expenses_log
 
         public AppWindow(string cur_user_login)
         {
+            _history = new List<Label>();
+
             InitializeComponent();
 
             _cur_user_login = cur_user_login.Trim(' ');
@@ -107,7 +109,6 @@ namespace Household_expenses_log
                 //Вывод истории
                 history_reader = history_command.ExecuteReader();
 
-                _history = new List<Label>();
                 while (history_reader.Read())
                 {
                     Label cur_label = new Label(); //Создаем отдельную запись для каждой операции
@@ -421,6 +422,15 @@ namespace Household_expenses_log
 
                 //Добавляем новую операцию в историю
                 InsertOperationIntoHistory(now.ToString(), spent_got, money_amount, _selected_icon.Tag.ToString());
+
+                //Настраиваем статистику
+                if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За неделю")
+                    setStatistics(StatisticsPeriod.Week);
+                else if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За месяц")
+                    setStatistics(StatisticsPeriod.Month);
+                else if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За год")
+                    setStatistics(StatisticsPeriod.Year);
+
             }
             catch (Exception ex)
             {
@@ -502,7 +512,6 @@ namespace Household_expenses_log
             MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
             MySqlCommand command = new MySqlCommand(query, databaseConnection);
             command.CommandTimeout = 60;
-            MySqlDataReader reader;
 
             try
             {
@@ -510,8 +519,7 @@ namespace Household_expenses_log
                 databaseConnection.Open();
 
                 //Исполнение запроса
-                reader = command.ExecuteReader();
-                reader.Close();
+                command.ExecuteNonQuery();
                 databaseConnection.Close();
             }
             catch (Exception ex)
@@ -764,7 +772,43 @@ namespace Household_expenses_log
             lb_statistics.Text = content_of_lb;
         }
 
-//-------------------------------------------------Работа с файлом----------------------------------------------------------------------
+//-------------------------------------------------Работа с комбоБоксами--------------------------------------------------
+        private void cbi_week_Selected(object sender, RoutedEventArgs e)
+        {
+            setStatistics(StatisticsPeriod.Week);
+        }
+
+        private void cbi_month_Selected(object sender, RoutedEventArgs e)
+        {
+            setStatistics(StatisticsPeriod.Month);
+        }
+
+        private void cbi_year_Selected(object sender, RoutedEventArgs e)
+        {
+            setStatistics(StatisticsPeriod.Year);
+        }
+
+        private void cbi_expenses_Selected(object sender, RoutedEventArgs e)
+        {
+            if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За неделю")
+                setStatistics(StatisticsPeriod.Week);
+            else if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За месяц")
+                setStatistics(StatisticsPeriod.Month);
+            if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За год")
+                setStatistics(StatisticsPeriod.Year);
+        }
+
+
+        private void cbi_income_Selected(object sender, RoutedEventArgs e)
+        {
+            if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За неделю")
+                setStatistics(StatisticsPeriod.Week);
+            else if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За месяц")
+                setStatistics(StatisticsPeriod.Month);
+            if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За год")
+                setStatistics(StatisticsPeriod.Year);
+        }
+        //-------------------------------------------------Работа с файлом----------------------------------------------------------------------
         private void saveToFile(string text)
         {
             SaveFileDialog save_file_dialog = new SaveFileDialog();

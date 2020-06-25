@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Windows.Controls.Primitives;
 
 namespace Household_expenses_log
 {
@@ -23,6 +24,7 @@ namespace Household_expenses_log
     public partial class MainWindow : Window, IMainWindow
     {
         private SignUpWindow _sign_up_window;
+        private Popup _login_popup, _pass_popup;
         //Связь с базой данных
         private string _connection_string = "server=localhost;port=3306;user=root;password=;database=household_expenses_log;";
 
@@ -30,7 +32,34 @@ namespace Household_expenses_log
         {
             InitializeComponent();
             _sign_up_window = new SignUpWindow(this);
+
+            createDataBase();
+            createUsersTable();
+
+            setPopups();
         }
+
+        private void setPopups()
+        {
+            _login_popup = new Popup();
+            setPopup(_login_popup, "Введите логин.", tb_login);
+
+            _pass_popup = new Popup();
+            setPopup(_pass_popup, "Введите пароль.", pb_pass);
+        }
+
+        private void setPopup(Popup popup, string text, UIElement target)
+        {
+            Label popupContent = new Label();
+            popupContent.Content = text;
+            popupContent.Background = Brushes.PapayaWhip;
+            popupContent.Foreground = Brushes.Tomato;
+            popup.Child = popupContent;
+            popup.PlacementTarget = target;
+            popup.Placement = PlacementMode.Bottom;
+            popup.IsOpen = false;
+        }
+
 
         public void ClearAllFields()
         {
@@ -64,24 +93,17 @@ namespace Household_expenses_log
 
         private void b_enter_Click(object sender, RoutedEventArgs e)
         {
-            //Создаем бд с таблицей, если они не существуют
-            string create_db_query = "CREATE DATABASE IF NOT EXISTS `household_expenses_log`;";
-            string create_table_query = "CREATE TABLE IF NOT EXISTS `users` (name VARCHAR(30) NOT NULL, surname VARCHAR(30) NOT NULL," +
-                "login VARCHAR(30) NOT NULL, email VARCHAR(30) NOT NULL, password VARCHAR(20) NOT NULL, cur_budget INT DEFAULT 0);";
+            //Проверка полей на пустоту
+            if (fieldsAreEmpty()) return;
 
             //Ищем пользователя в бд
-            string query = $"SELECT `password` FROM `users` WHERE `login` = '{tb_login.Text.ToLower().Trim(' ')}';";
+            string login = tb_login.Text.ToLower().Trim(' ');
+            string query = $"SELECT `password` FROM `users` WHERE `login` = '{login}';";
 
             //Подготовка соединения
             MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
-            MySqlCommand create_db_command = new MySqlCommand(create_db_query, databaseConnection);
-            MySqlCommand create_table_command = new MySqlCommand(create_table_query, databaseConnection);
             MySqlCommand select_command = new MySqlCommand(query, databaseConnection);
             select_command.CommandTimeout = 60;
-            create_table_command.CommandTimeout = 60;
-            create_db_command.CommandTimeout = 60;
-            MySqlDataReader create_db_reader;
-            MySqlDataReader create_table_reader;
             MySqlDataReader select_reader;
 
             try
@@ -89,30 +111,14 @@ namespace Household_expenses_log
                 //Открытие базы данных
                 databaseConnection.Open();
 
-                //Исполнение запроса
-                create_db_reader = select_command.ExecuteReader();
-                create_db_reader.Close();
-                create_table_reader = select_command.ExecuteReader();
-                create_table_reader.Close();
+                //Исполнение запросa
                 select_reader = select_command.ExecuteReader();
 
                 if (select_reader.HasRows) //Если нашелся пользователь с таким логином
                 {
                     select_reader.Read();
-                    if (select_reader.GetValue(0).ToString() == pb_pass.Password) //Если пароль введен верно
-                    {
-                        this.Hide();
-                        AppWindow app_window = new AppWindow(tb_login.Text);
-                        app_window.Show(); //Открываем окно с приложением
-                    }
-                    else 
-                    {
-                        MessageBox.Show("Пароль неверен.");
-                        //Закрываем соединение
-                        select_reader.Close();
-                        databaseConnection.Close();
-                        return;
-                    }
+
+                    checkPassword(login, select_reader.GetValue(0).ToString(), pb_pass.Password);
                     //Закрываем соединение
                     select_reader.Close();
                     databaseConnection.Close();
@@ -138,6 +144,99 @@ namespace Household_expenses_log
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void tb_login_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _login_popup.IsOpen = false;
+        }
+
+        private void pb_pass_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _pass_popup.IsOpen = false;
+        }
+
+
+        //-----------------------------------------Работа с БД-------------------------------------------------------------------
+        //Метод, создающий БД, если она не существует
+        private void createDataBase()
+        {
+            string query = "CREATE DATABASE IF NOT EXISTS `household_expenses_log`;";
+
+            MySqlConnection databaseConnection = new MySqlConnection("server=localhost;port=3306;user=root;password=;");
+            MySqlCommand command = new MySqlCommand(query, databaseConnection);
+            command.CommandTimeout = 60;
+
+            try
+            {
+                //Открытие базы данных
+                databaseConnection.Open();
+
+                //Исполнение запроса
+                command.ExecuteNonQuery();
+                databaseConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        //Метод, создающий таблицу "user", если она ещё не создана
+        private void createUsersTable()
+        {
+            string query = "CREATE TABLE IF NOT EXISTS `users` (name VARCHAR(30) NOT NULL, surname VARCHAR(30) NOT NULL," +
+                "login VARCHAR(30) NOT NULL, email VARCHAR(30) NOT NULL, password VARCHAR(20) NOT NULL, cur_budget INT DEFAULT 0);";
+
+            MySqlConnection databaseConnection = new MySqlConnection(_connection_string);
+            MySqlCommand command = new MySqlCommand(query, databaseConnection);
+            command.CommandTimeout = 60;
+
+            try
+            {
+                //Открытие базы данных
+                databaseConnection.Open();
+
+                //Исполнение запроса
+                command.ExecuteNonQuery();
+                databaseConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+//----------------------------------------Методы-проверки-----------------------------------------------------------------
+        private void checkPassword(string login, string pass_from_db, string input_password)
+        {
+            if (pass_from_db == input_password) //Если пароль введен верно
+            {
+                this.Hide();
+                AppWindow app_window = new AppWindow(login);
+                app_window.Show(); //Открываем окно с приложением
+            }
+            else
+            {
+                MessageBox.Show("Пароль неверен.");
+            }
+        }
+
+        private bool fieldsAreEmpty()
+        {
+            bool ret_value = false;
+            if (tb_login.Text.Length == 0)
+            {
+                _login_popup.IsOpen = true;
+                ret_value = true;
+            }
+            if (pb_pass.Password.Length == 0)
+            {
+                _pass_popup.IsOpen = true;
+                ret_value = true;
+            }
+            return ret_value;
         }
     }
 }

@@ -16,10 +16,10 @@
                FontSize="20" RenderTransformOrigin="0.482,-0.273"/>
         <TextBox x:Name ="tb_login" HorizontalAlignment="Left" Margin="131,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="495"
                 FontSize="15" FontFamily ="Times New Roman" 
-                 Height ="{Binding ElementName = lb_users_name, Path = FontSize}"/>
+                 Height ="{Binding ElementName = lb_users_name, Path = FontSize}" GotFocus="tb_login_GotFocus"/>
         <PasswordBox x:Name="pb_pass" HorizontalAlignment="Left" Margin="131,124,0,0" VerticalAlignment="Top" Width="495"
                 FontSize="15" FontFamily ="Times New Roman" 
-                 Height ="{Binding ElementName = lb_pass, Path = FontSize}"/>
+                 Height ="{Binding ElementName = lb_pass, Path = FontSize}" GotFocus="pb_pass_GotFocus"/>
         <Button x:Name ="b_sign_up" Content="Зарегистрироваться" HorizontalAlignment="Left" Margin="131,175,0,0" VerticalAlignment="Top" Width="153" Height="42"
                 FontFamily="Times New Roman" FontSize="15" Click="b_sign_up_Click"/>
         <Button x:Name="b_enter" Content="Войти" HorizontalAlignment="Left" Margin="523,175,0,0" VerticalAlignment="Top" Width="103" Height="42"
