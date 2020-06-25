@@ -134,30 +134,37 @@ namespace Household_expenses_log
                     _history.Add(cur_label);
                 }
                 _history.Reverse();
-                foreach (Label label in _history)
-                {
-                    Border border = new Border();
-                    if (label.Content.ToString().Contains("потрачено"))
-                    {
-                        border.Background = Brushes.SkyBlue;
-                        border.BorderBrush = Brushes.DodgerBlue;
-                    }
-                    else
-                    {
-                        border.Background = Brushes.YellowGreen;
-                        border.BorderBrush = Brushes.Green;
-                    }
-                    border.Child = label;
-                    border.Margin = new Thickness(10, 5, 20, 5);
-                    border.BorderThickness = new Thickness(1);
-                    sp_history.Children.Add(border);
-                }
 
+                displayHistory();
+              
                 databaseConnection.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void displayHistory()
+        {
+            foreach (Label label in _history)
+            {
+                Border border = new Border();
+                if (label.Content.ToString().Contains("потрачено"))
+                {
+                    border.Background = Brushes.SkyBlue;
+                    border.BorderBrush = Brushes.DodgerBlue;
+                }
+                else
+                {
+                    border.Background = Brushes.YellowGreen;
+                    border.BorderBrush = Brushes.Green;
+                }
+                border.Child = label;
+                border.Margin = new Thickness(10, 5, 20, 5);
+                border.BorderThickness = new Thickness(1);
+                border.CornerRadius = new CornerRadius(5);
+                sp_history.Children.Add(border);
             }
         }
 
@@ -207,7 +214,10 @@ namespace Household_expenses_log
             }
 
             if (_chart_source.Count == 0) //Если не нашлось подходящих записей
+            {
+                lb_statistics.Text = String.Empty;
                 return; //нечего рисовать на диаграмме
+            }
 
             Dictionary<string, int>.KeyCollection key_coll = _chart_source.Keys;
             foreach (string key in key_coll)
@@ -788,24 +798,13 @@ namespace Household_expenses_log
             setStatistics(StatisticsPeriod.Year);
         }
 
-        private void cbi_expenses_Selected(object sender, RoutedEventArgs e)
+        private void cb_expenses_income_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За неделю")
                 setStatistics(StatisticsPeriod.Week);
             else if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За месяц")
                 setStatistics(StatisticsPeriod.Month);
-            if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За год")
-                setStatistics(StatisticsPeriod.Year);
-        }
-
-
-        private void cbi_income_Selected(object sender, RoutedEventArgs e)
-        {
-            if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За неделю")
-                setStatistics(StatisticsPeriod.Week);
-            else if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За месяц")
-                setStatistics(StatisticsPeriod.Month);
-            if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За год")
+            else if (((ComboBoxItem)cb_period.SelectedItem).Content.ToString() == "За год")
                 setStatistics(StatisticsPeriod.Year);
         }
         //-------------------------------------------------Работа с файлом----------------------------------------------------------------------

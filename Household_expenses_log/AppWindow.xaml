@@ -27,16 +27,13 @@
             <MenuItem Header="Выход" Click="mi_exit_Click"/>
         </Menu>
 
-        <Expander HorizontalAlignment="Left" Height="140" Margin="472,0,0,0" Width="178" VerticalAlignment="Top" Panel.ZIndex="1">
+        <Expander HorizontalAlignment="Left" Height="80" Margin="472,0,0,0" Width="178" VerticalAlignment="Top" Panel.ZIndex="1">
             <Expander.Header>
                 <Label x:Name="lb_user_login"/>
             </Expander.Header>
 
             <StackPanel HorizontalAlignment="Left" Height="121" Margin="0,0,-2,0" Width="178" VerticalAlignment="Top" Background="White">
                 <Label x:Name="lb_balance" Content="Баланс: " HorizontalAlignment="Center" />
-                <Button Content="Мой профиль"/>
-                <Button Content="Редактировать"/>
-                <Button Content="Настройки"/>
                 <Button Content="Сменить аккаунт" Click="b_change_acc_Click"/>
             </StackPanel>
         </Expander>
@@ -56,9 +53,10 @@
                         <ComboBoxItem x:Name="cbi_month" Content="За месяц" Selected="cbi_month_Selected"/>
                         <ComboBoxItem x:Name="cbi_year" Content="За год" Selected="cbi_year_Selected"/>
                     </ComboBox>
-                    <ComboBox x:Name="cb_expenses_income" HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Margin="305,10,0,0">
-                        <ComboBoxItem Content="Расходы" IsSelected="True" Selected="cbi_expenses_Selected"/>
-                        <ComboBoxItem Content="Доходы" Selected="cbi_income_Selected"/>
+                    <ComboBox x:Name="cb_expenses_income" HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Margin="305,10,0,0" 
+                              SelectionChanged="cb_expenses_income_SelectionChanged">
+                        <ComboBoxItem Content="Расходы" IsSelected="True"/>
+                        <ComboBoxItem Content="Доходы"/>
                     </ComboBox>
                     <WindowsFormsHost Margin="33,78,37,135">
                         <winformchart:Chart x:Name="ch_statistics" Dock="Fill">
