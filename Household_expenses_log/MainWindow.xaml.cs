@@ -51,7 +51,8 @@ namespace Household_expenses_log
             //Если окно было скрыто
             if (this.Visibility == Visibility.Hidden || this.Visibility == Visibility.Collapsed) return; //Выходим без вызова MessageBox
 
-            MessageBoxResult dialog_result = MessageBox.Show("Закрыть приложение?", "Завершение работы", MessageBoxButton.YesNo);
+            MessageBoxResult dialog_result = MessageBox.Show("Закрыть приложение?", "Завершение работы", MessageBoxButton.YesNo, 
+                MessageBoxImage.Question);
 
             if (dialog_result == MessageBoxResult.Yes)
                 Application.Current.Shutdown(); //Завершаем работу приложения

@@ -81,7 +81,8 @@ namespace Household_expenses_log
             //Если окно было скрыто
             if (this.Visibility == Visibility.Hidden || this.Visibility == Visibility.Collapsed) return; //Выходим без вызова MessageBox
 
-            MessageBoxResult dialog_result = System.Windows.MessageBox.Show("Закрыть приложение?", "Завершение работы", MessageBoxButton.YesNo);
+            MessageBoxResult dialog_result = System.Windows.MessageBox.Show("Закрыть приложение?", "Завершение работы", MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
 
             if (dialog_result == MessageBoxResult.Yes)
                 System.Windows.Application.Current.Shutdown(); //Завершаем работу приложения
@@ -200,6 +201,116 @@ namespace Household_expenses_log
             lb_warning5.Visibility = Visibility.Hidden;
         }
 
+        private void tb_budget_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox text_box = (TextBox)sender;
+            int carret_index = text_box.CaretIndex;
+
+            //Проверяем, не начинается ли строка с 0
+            if (text_box.Text.Length > 0 && text_box.Text[0] == '0')
+            {
+                text_box.Text = text_box.Text.Remove(0, 1);
+                if (carret_index > 0) carret_index--;
+            }
+
+            //Проверяем, не введены ли буквы или другие посторонние символы
+            for (int i = 0; i < text_box.Text.Length; ++i)
+                if (!Char.IsDigit(text_box.Text[i]))
+                {
+                    text_box.Text = text_box.Text.Remove(i, 1);
+                    if (i < carret_index) carret_index--;
+                }
+
+            text_box.CaretIndex = carret_index;
+        }
+
+        //Проверка на корректность введенных полей
+        private bool fieldsCheckSuccesful()
+        {
+            bool ret_value = true;//Флаг, определяющий, можно ли регистрировать пользователя
+
+            //Проверка полей
+            if (lb_warning1.Visibility == Visibility.Visible)
+            {
+                tb_users_name.BorderBrush = Brushes.Red;
+                tb_users_name.BorderThickness = new Thickness(3);
+                ret_value = false;
+            }
+            else if (tb_users_name.Text.Length == 0)
+            {
+                tb_users_name.BorderBrush = Brushes.Red;
+                tb_users_name.BorderThickness = new Thickness(3);
+                lb_enter_name.Visibility = Visibility.Visible;
+                ret_value = false;
+            }
+
+            if (lb_warning2.Visibility == Visibility.Visible)
+            {
+                tb_email.BorderBrush = Brushes.Red;
+                tb_email.BorderThickness = new Thickness(3);
+                ret_value = false;
+            }
+            else if (tb_email.Text.Length == 0)
+            {
+                tb_email.BorderBrush = Brushes.Red;
+                tb_email.BorderThickness = new Thickness(3);
+                lb_enter_email.Visibility = Visibility.Visible;
+                ret_value = false;
+            }
+
+            if (lb_warning3.Visibility == Visibility.Visible)
+            {
+                pb_pass.BorderBrush = Brushes.Red;
+                pb_pass.BorderThickness = new Thickness(3);
+                ret_value = false;
+            }
+            else if (pb_pass.Password.Length == 0)
+            {
+                pb_pass.BorderBrush = Brushes.Red;
+                pb_pass.BorderThickness = new Thickness(3);
+                lb_enter_pass.Visibility = Visibility.Visible;
+                ret_value = false;
+            }
+
+            if (lb_warning4.Visibility == Visibility.Visible)
+            {
+                pb_pass_repeat.BorderBrush = Brushes.Red;
+                pb_pass_repeat.BorderThickness = new Thickness(3);
+                ret_value = false;
+            }
+
+            if (lb_warning5.Visibility == Visibility.Visible)
+            {
+                tb_surname.BorderBrush = Brushes.Red;
+                tb_surname.BorderThickness = new Thickness(3);
+                ret_value = false;
+            }
+            else if (tb_surname.Text.Length == 0)
+            {
+                tb_surname.BorderBrush = Brushes.Red;
+                tb_surname.BorderThickness = new Thickness(3);
+                lb_enter_surname.Visibility = Visibility.Visible;
+                ret_value = false;
+            }
+
+            if (tb_login.Text.Length == 0)
+            {
+                tb_login.BorderBrush = Brushes.Red;
+                tb_login.BorderThickness = new Thickness(3);
+                lb_enter_login.Visibility = Visibility.Visible;
+                ret_value = false;
+            }
+
+            if (pb_pass_repeat.Password.Length == 0 && pb_pass.Password.Length > 0)
+            {
+                pb_pass_repeat.BorderBrush = Brushes.Red;
+                pb_pass_repeat.BorderThickness = new Thickness(3);
+                lb_warning4.Visibility = Visibility.Visible;
+                ret_value = false;
+            }
+
+            return ret_value;
+        }
 
         //Обработчики событий для кнопок
         private void b_back_Click(object sender, RoutedEventArgs e)
@@ -211,90 +322,9 @@ namespace Household_expenses_log
 
         private void b_sign_up_Click(object sender, RoutedEventArgs e)
         {
-            bool sign_up_flag = true;//Флаг, определяющий, можно ли регистрировать пользователя
-
-            //Проверка полей
-            if (lb_warning1.Visibility == Visibility.Visible)
-            {
-                tb_users_name.BorderBrush = Brushes.Red;
-                tb_users_name.BorderThickness = new Thickness(3);
-                sign_up_flag = false;
-            }
-            else if (tb_users_name.Text.Length == 0)
-            {
-                tb_users_name.BorderBrush = Brushes.Red;
-                tb_users_name.BorderThickness = new Thickness(3);
-                lb_enter_name.Visibility = Visibility.Visible;
-                sign_up_flag = false;
-            }
-
-            if (lb_warning2.Visibility == Visibility.Visible)
-            {
-                tb_email.BorderBrush = Brushes.Red;
-                tb_email.BorderThickness = new Thickness(3);
-                sign_up_flag = false;
-            }
-            else if (tb_email.Text.Length == 0)
-            {
-                tb_email.BorderBrush = Brushes.Red;
-                tb_email.BorderThickness = new Thickness(3);
-                lb_enter_email.Visibility = Visibility.Visible;
-                sign_up_flag = false;
-            }
-
-            if (lb_warning3.Visibility == Visibility.Visible)
-            {
-                pb_pass.BorderBrush = Brushes.Red;
-                pb_pass.BorderThickness = new Thickness(3);
-                sign_up_flag = false;
-            }
-            else if (pb_pass.Password.Length == 0)
-            {
-                pb_pass.BorderBrush = Brushes.Red;
-                pb_pass.BorderThickness = new Thickness(3);
-                lb_enter_pass.Visibility = Visibility.Visible;
-                sign_up_flag = false;
-            }
-
-            if (lb_warning4.Visibility == Visibility.Visible)
-            {
-                pb_pass_repeat.BorderBrush = Brushes.Red;
-                pb_pass_repeat.BorderThickness = new Thickness(3);
-                sign_up_flag = false;
-            }
-
-            if (lb_warning5.Visibility == Visibility.Visible)
-            {
-                tb_surname.BorderBrush = Brushes.Red;
-                tb_surname.BorderThickness = new Thickness(3);
-                sign_up_flag = false;
-            }
-            else if (tb_surname.Text.Length == 0)
-            {
-                tb_surname.BorderBrush = Brushes.Red;
-                tb_surname.BorderThickness = new Thickness(3);
-                lb_enter_surname.Visibility = Visibility.Visible;
-                sign_up_flag = false;
-            }
-
-            if (tb_login.Text.Length == 0)
-            {
-                tb_login.BorderBrush = Brushes.Red;
-                tb_login.BorderThickness = new Thickness(3);
-                lb_enter_login.Visibility = Visibility.Visible;
-                sign_up_flag = false;
-            }
-
-            if (pb_pass_repeat.Password.Length == 0 && pb_pass.Password.Length > 0)
-            {
-                pb_pass_repeat.BorderBrush = Brushes.Red;
-                pb_pass_repeat.BorderThickness = new Thickness(3);
-                lb_warning4.Visibility = Visibility.Visible;
-                sign_up_flag = false;
-            }
-
-            if (sign_up_flag == false) return;
-            
+            //Проверяем, все ли поля заполнены
+            if (!fieldsCheckSuccesful()) return;
+        
             //Проверяем, существует ли пользователь с введенным email
             if (userWithEmailExists(tb_email.Text))
             {
@@ -322,7 +352,10 @@ namespace Household_expenses_log
             }
 
             //Добавляем пользователя в базу данных 
-            registerUser(tb_users_name.Text, tb_surname.Text, tb_login.Text, tb_email.Text, pb_pass.Password);
+            if (chb_set_budget.IsChecked == true && tb_start_budget.Text.Length > 0)
+                registerUser(tb_users_name.Text, tb_surname.Text, tb_login.Text, tb_email.Text, pb_pass.Password, Int32.Parse(tb_start_budget.Text));
+            else
+                registerUser(tb_users_name.Text, tb_surname.Text, tb_login.Text, tb_email.Text, pb_pass.Password);
 
             //Открываем окно с приложением
             AppWindow app_window = new AppWindow(tb_login.Text.ToLower().Trim(' '));
@@ -412,11 +445,11 @@ namespace Household_expenses_log
         }
 
         //Регистрируем пользователя, т.е. добавляем в БД
-        private void registerUser(string name, string surname, string login, string email, string password)
+        private void registerUser(string name, string surname, string login, string email, string password, int budget = 0)
         {   
             string connectionString = "server=localhost;port=3306;user=root;password=;database=household_expenses_log;";
-            string query = $"INSERT INTO users(`name`, `surname`, `login`, `email`, `password`) VALUES ('{name}', '{surname}', " +
-                $"'{login.ToLower().Trim(' ')}', '{email.ToLower()}', '{password}');";
+            string query = $"INSERT INTO users(`name`, `surname`, `login`, `email`, `password`, `cur_budget`) VALUES ('{name}', '{surname}', " +
+                $"'{login.ToLower().Trim(' ')}', '{email.ToLower()}', '{password}', '{budget}');";
 
             MySqlConnection databaseConnection = new MySqlConnection(connectionString);
             MySqlCommand commandDatabase = new MySqlCommand(query, databaseConnection);
@@ -467,6 +500,19 @@ namespace Household_expenses_log
                         ((Label)child).Visibility = Visibility.Hidden;
                 }
             }
+        }
+
+        //Методы, работающие с checkBox-ом
+        private void chb_Checked(object sender, RoutedEventArgs e)
+        {
+            lb_start_budget.Visibility = Visibility.Visible;
+            tb_start_budget.Visibility = Visibility.Visible;
+        }
+
+        private void chb_Unchecked(object sender, RoutedEventArgs e)
+        {
+            lb_start_budget.Visibility = Visibility.Hidden;
+            tb_start_budget.Visibility = Visibility.Hidden;
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Household_expenses_log"
         mc:Ignorable="d"
-        Title="Окно регистрации" Height="470" Width="658.217"
+        Title="Окно регистрации" Height="530" Width="658.217"
         Closing="SignUpWindow_Closing"
         WindowStartupLocation="CenterScreen">
     <Grid x:Name="grid_layout">
@@ -21,6 +21,8 @@
             FontSize="20"/>
         <Label Content="Логин:" HorizontalAlignment="Left" Margin="133,143,0,0" VerticalAlignment="Top" FontFamily ="Times New Roman" 
             FontSize="20"/>
+        <Label x:Name="lb_start_budget" Content="Начальный бюджет:" HorizontalAlignment="Left" Margin="19,383,0,0" VerticalAlignment="Top"
+               FontFamily ="Times New Roman" FontSize="20" Visibility="Hidden"/>
 
         <TextBox x:Name="tb_users_name" Tag="Name" HorizontalAlignment="Left" Height="28" Margin="252,48,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"
                  FontSize="{Binding ElementName= lb_user_name, Path = FontSize}" FontFamily ="Times New Roman" TextChanged="tb_users_name_TextChanged" 
@@ -40,11 +42,16 @@
         <TextBox x:Name="tb_login" Tag="Login" HorizontalAlignment="Left" Height="28" Margin="252,148,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="372"
             FontSize="{Binding FontSize, ElementName=lb_user_name}" FontFamily ="Times New Roman" TextChanged="tb_users_name_TextChanged"
                  GotFocus="tb_GotFocus"/>
+        <TextBox x:Name="tb_start_budget" Tag="Budget" HorizontalAlignment="Left" Height="28" Margin="252,388,0,0" TextWrapping="Wrap" 
+                 VerticalAlignment="Top" Width="372" FontSize="{Binding FontSize, ElementName=lb_user_name}" FontFamily ="Times New Roman" 
+                 TextChanged="tb_budget_TextChanged" Visibility="Hidden"/>
 
+        <CheckBox x:Name="chb_set_budget" Content="Задать начальный бюджет" HorizontalAlignment="Left" Margin="14,348,0,0" VerticalAlignment="Top" FontSize="15"
+                  FontFamily="Times New Roman" Checked="chb_Checked" Unchecked="chb_Unchecked"/>
 
-        <Button x:Name="b_sign_up" Content="Зарегистрироваться" HorizontalAlignment="Left" Margin="436,375,0,0" VerticalAlignment="Top" Width="188" Height="30"
+        <Button x:Name="b_sign_up" Content="Зарегистрироваться" HorizontalAlignment="Left" Margin="436,448,0,0" VerticalAlignment="Top" Width="188" Height="30"
                 FontSize="15" Click="b_sign_up_Click"/>
-        <Button x:Name="b_back" Content="Назад" HorizontalAlignment="Left" Margin="252,375,0,0" VerticalAlignment="Top" Width="85" Height="30"
+        <Button x:Name="b_back" Content="Назад" HorizontalAlignment="Left" Margin="252,448,0,0" VerticalAlignment="Top" Width="85" Height="30"
             FontSize="15" Click="b_back_Click"/>
 
         <!-- Предупреждающие надписи для "енотов" -->
@@ -68,7 +75,5 @@
                Foreground="Red" Visibility="Hidden"/>
         <Label x:Name="lb_warning4" Content="Пароли не совпадают." HorizontalAlignment="Left" Margin="252,326,0,0" VerticalAlignment="Top"
                Foreground="Red" Visibility="Hidden"/>
-       
-
     </Grid>
 </Window>

@@ -60,6 +60,10 @@ namespace Household_expenses_log
             //Настройка статистики
             _chart_source = new Dictionary<string, int>();
             setStatistics(StatisticsPeriod.Week);
+            //Настройка легенды
+            setLegend(ch_statistics, "series", "Legend");
+            //Настройка цветов
+            setColors(ch_statistics);
         }
 
 //-----------------------Методы, динамические изменяющие внешние данные-----------------------------------------------------------------------
@@ -162,6 +166,7 @@ namespace Household_expenses_log
                 return; //То показывать нечего
 
             _chart_source.Clear();
+            ch_statistics.Series["series"].Points.Clear();
             //Заполняем источник данных для диаграммы
             foreach (Label label in _history)
             {
@@ -209,15 +214,11 @@ namespace Household_expenses_log
                 ch_statistics.Series["series"].Points.AddXY(key, _chart_source[key]);
             }
 
-            //Настройка легенды
-            setLegend(ch_statistics, "series", "Legend");
-
-            //Настройка цветов
-            setColors(ch_statistics);
-
+            
             //Настройка текста под графиком
             setStatisticsText(_chart_source);
         }
+
 
         private void AppWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -243,7 +244,8 @@ namespace Household_expenses_log
             //Если окно было скрыто
             if (this.Visibility == Visibility.Hidden || this.Visibility == Visibility.Collapsed) return; //Выходим без вызова MessageBox
 
-            MessageBoxResult dialog_result = MessageBox.Show("Закрыть приложение?", "Завершение работы", MessageBoxButton.YesNo);
+            MessageBoxResult dialog_result = MessageBox.Show("Закрыть приложение?", "Завершение работы", MessageBoxButton.YesNo, 
+                MessageBoxImage.Question);
 
             if (dialog_result == MessageBoxResult.Yes)
             {
@@ -518,60 +520,46 @@ namespace Household_expenses_log
             }
         }
 
-        //Метод, сохраняющий текст в вордовский файл
-        private void SaveToWordFile(string file_name, string text)
-        {
-            //Открываем ворд на фоне
-            Word.Application app = new Word.Application();
-            app.Visible = false;
-            Word.Document doc = app.Documents.Add();
-            doc.Paragraphs[1].Range.Text = text;
-
-            for (int i = 1; i < doc.Paragraphs.Count; ++i)
-            {
-                doc.Paragraphs[i].Range.Font.Name = "Times New Roman";
-                doc.Paragraphs[i].Range.Font.Size = 14;
-            }
-
-            doc.SaveAs2(file_name);
-            doc.Close();
-            app.Quit();
-        }
-
 //-------------------------Обработчики события нажатия menuItems-------------------------------------------------------------------
         private void mi_save_history_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog save_file_dialog = new SaveFileDialog();
-            save_file_dialog.Filter = "Text files (*.txt)|*.txt|Microsoft Word Files (*.doc)|*.doc|" +
-                "Microsoft Word Compressed Files (*.docx)|*.docx|All files (*.*)|*.*";
-
-            //Проверяем выбор пользователя
-            if (save_file_dialog.ShowDialog() == true && save_file_dialog.FileName.Length > 0)
+            //Записываем текст 
+            string text = String.Empty;
+            foreach (Label label in _history)
             {
-                //Записываем текст 
-                string text = String.Empty;
-                foreach (Label label in _history)
-                {
-                    text += label.Content.ToString() + "\n";
-                }
-
-                //Проверяем расширение файла
-                if (save_file_dialog.FileName.EndsWith(".txt"))
-                {
-                    File.WriteAllText(save_file_dialog.FileName, text);
-                }
-                else
-                {
-                    _WriteToWordFileDelegate d = new _WriteToWordFileDelegate(SaveToWordFile);
-                    d.BeginInvoke(save_file_dialog.FileName, text, null, null);   
-                }
+                text += label.Content.ToString() + "\n";
             }
+            saveToFile(text);
         }
 
         private void mi_save_week_stat_Click(object sender, RoutedEventArgs e)
         {
+            //Настраиваем вкладку "Статистика"
             ComboBoxItem item = FindName("cbi_week") as ComboBoxItem;
             cb_period.SelectedItem = item;
+            setStatistics(StatisticsPeriod.Week);
+
+            saveToFile(lb_statistics.Text);
+        }
+
+        private void mi_save_month_stat_Click(object sender, RoutedEventArgs e)
+        {
+            //Настраиваем вкладку "Статистика"
+            ComboBoxItem item = FindName("cbi_month") as ComboBoxItem;
+            cb_period.SelectedItem = item;
+            setStatistics(StatisticsPeriod.Month);
+
+            saveToFile(lb_statistics.Text);
+        }
+
+        private void mi_save_year_stat_Click(object sender, RoutedEventArgs e)
+        {
+            //Настраиваем вкладку "Статистика"
+            ComboBoxItem item = FindName("cbi_year") as ComboBoxItem;
+            cb_period.SelectedItem = item;
+            setStatistics(StatisticsPeriod.Year);
+
+            saveToFile(lb_statistics.Text);
         }
 
         private void mi_about_program_Click(object sender, RoutedEventArgs e)
@@ -607,31 +595,30 @@ namespace Household_expenses_log
         {
             if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl)) return;
 
-            //switch (e.Key)
-            //{
-            //    case Key.H:
-            //        mi_save_history_Click(new object(), new RoutedEventArgs());
-            //        break;
-            //    case Key.W:
-            //        mi_save_week_stat_Click(new object(), new RoutedEventArgs());
-            //        break;
-            //    case Key.M:
-            //        mi_save_month_stat_Click(new object(), new RoutedEventArgs());
-            //        break;
-            //    case Key.Y:
-            //        mi_save_year_stat_Click(new object(), new RoutedEventArgs());
-            //        break;
-            //    case Key.R:
-            //        mi_watch_ref_Click(new object(), new RoutedEventArgs());
-            //        break;
-            //    case Key.A:
-            //        mi_about_program_Click(new object(), new RoutedEventArgs());
-            //        break;
-            //    case Key.E:
-            //        mi_exit_Click(new object(), new RoutedEventArgs());
-            //        break;
-
-            //}
+            switch (e.Key)
+            {
+                case Key.H:
+                    mi_save_history_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.W:
+                    mi_save_week_stat_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.M:
+                    mi_save_month_stat_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.Y:
+                    mi_save_year_stat_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.R:
+                    mi_watch_ref_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.A:
+                    mi_about_program_Click(new object(), new RoutedEventArgs());
+                    break;
+                case Key.E:
+                    mi_exit_Click(new object(), new RoutedEventArgs());
+                    break;
+            }
         }
 
         private void ti_stats_GotFocus(object sender, RoutedEventArgs e)
@@ -749,10 +736,10 @@ namespace Household_expenses_log
         //Настройка легенды для графика chart
         private void setLegend(Chart chart, string series_name, string legend_name)
         {
-             chart.Legends.Add(new Legend(legend_name));
-             chart.Series[series_name].Legend = legend_name;
-             chart.Series[series_name].IsVisibleInLegend = true;
-             chart.Series[series_name]["PieLabelStyle"] = "Disabled";
+            chart.Legends.Add(new Legend(legend_name));
+            chart.Series[series_name].Legend = legend_name;
+            chart.Series[series_name].IsVisibleInLegend = true;
+            chart.Series[series_name]["PieLabelStyle"] = "Disabled";
         }
 
         private void setColors(Chart chart)
@@ -775,6 +762,49 @@ namespace Household_expenses_log
                 content_of_lb += key + ": " + dictionary[key] + "; ";
             }
             lb_statistics.Text = content_of_lb;
+        }
+
+//-------------------------------------------------Работа с файлом----------------------------------------------------------------------
+        private void saveToFile(string text)
+        {
+            SaveFileDialog save_file_dialog = new SaveFileDialog();
+            save_file_dialog.Filter = "Text files (*.txt)|*.txt|Microsoft Word Files (*.doc)|*.doc|" +
+                "Microsoft Word Compressed Files (*.docx)|*.docx|All files (*.*)|*.*";
+
+            //Проверяем выбор пользователя
+            if (save_file_dialog.ShowDialog() == true && save_file_dialog.FileName.Length > 0)
+            {
+                //Проверяем расширение файла
+                if (save_file_dialog.FileName.EndsWith(".txt"))
+                {
+                    File.WriteAllText(save_file_dialog.FileName, text);
+                }
+                else
+                {
+                    _WriteToWordFileDelegate d = new _WriteToWordFileDelegate(SaveToWordFile);
+                    d.BeginInvoke(save_file_dialog.FileName, text, null, null);
+                }
+            }
+        }
+
+        //Метод, сохраняющий текст в вордовский файл
+        private void SaveToWordFile(string file_name, string text)
+        {
+            //Открываем ворд на фоне
+            Word.Application app = new Word.Application();
+            app.Visible = false;
+            Word.Document doc = app.Documents.Add();
+            doc.Paragraphs[1].Range.Text = text;
+
+            for (int i = 1; i < doc.Paragraphs.Count; ++i)
+            {
+                doc.Paragraphs[i].Range.Font.Name = "Times New Roman";
+                doc.Paragraphs[i].Range.Font.Size = 14;
+            }
+
+            doc.SaveAs2(file_name);
+            doc.Close();
+            app.Quit();
         }
     }   
 }

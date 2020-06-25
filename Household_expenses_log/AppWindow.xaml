@@ -15,8 +15,8 @@
             <MenuItem Header="Файл">
                 <MenuItem Header="Сохранить статистику">
                     <MenuItem Header="За неделю" Click="mi_save_week_stat_Click"/>
-                    <MenuItem Header="За месяц"/>
-                    <MenuItem Header="За год"/>
+                    <MenuItem Header="За месяц" Click="mi_save_month_stat_Click"/>
+                    <MenuItem Header="За год" Click="mi_save_year_stat_Click"/>
                 </MenuItem>
                 <MenuItem Header="Сохранить историю" Click="mi_save_history_Click"/>
             </MenuItem>
@@ -53,8 +53,8 @@
                 <Grid>
                     <ComboBox x:Name="cb_period" HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Margin="10,10,0,0">
                         <ComboBoxItem x:Name="cbi_week" Content="За неделю" IsSelected="True"/>
-                        <ComboBoxItem Content="За месяц"/>
-                        <ComboBoxItem Content="За год"/>
+                        <ComboBoxItem x:Name="cbi_month" Content="За месяц"/>
+                        <ComboBoxItem x:Name="cbi_year" Content="За год"/>
                     </ComboBox>
                     <ComboBox x:Name="cb_expenses_income" HorizontalAlignment="Left" VerticalAlignment="Top" Width="135" Margin="305,10,0,0">
                         <ComboBoxItem Content="Расходы" IsSelected="True"/>
@@ -91,8 +91,8 @@
 
 
                     <TabControl x:Name="tc_categories" Margin="0,128,263,110">
-                        <TabItem Header="Потрачено">
-                            <StackPanel>
+                        <TabItem x:Name="tab_spent" Header="Потрачено">
+                            <StackPanel x:Name="stack_panel1">
                                 <Label x:Name="lb_choose_category" Content="Выберите категорию" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" 
                                        FontSize="18"/>
                                 <WrapPanel x:Name="wp_categories" HorizontalAlignment="Left" Width="381" Margin="0,0,0,0" Visibility="Visible">
@@ -199,7 +199,7 @@
                             </StackPanel>
                         </TabItem>
                         <TabItem Header="Получено">
-                            <StackPanel>
+                            <StackPanel x:Name="stack_panel2">
                                 <Label x:Name="lb_choose_category2" Content="Выберите категорию" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" FontSize="18"/>
                                 <WrapPanel x:Name="wp_categories2" HorizontalAlignment="Left" Width="381" Margin="0,0,0,0" Visibility="Visible">
                                     <Border BorderThickness="3">
